@@ -50,8 +50,8 @@ var funWebSvr = function (req, res) {
         pathName += "/";
     }
     if (pathName.charAt(pathName.length - 1) == "/") {
-
-        pathName += "photo.html";
+        pathName += "index.html";
+        //pathName += "photo.html";
         //pathName += "location_test1.html";
     }
 
@@ -59,7 +59,7 @@ var funWebSvr = function (req, res) {
     params = libUrl.parse(req.url,true).query;
     //console.log(params.toString());
 
-    var filePath = libPath.join("./WebRoot", pathName);
+    var filePath = libPath.join("./personalSite", pathName);
 
     fs.exists(filePath, function (exists) {
         if (exists) {
