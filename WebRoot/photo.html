@@ -1,80 +1,200 @@
-<!DOCTYPE html>
+<!--<!DOCTYPE html>-->
+<!--<html>-->
+<!--<head lang="en">-->
+<!--<meta charset="UTF-8">-->
+<!--<title></title>-->
+<!--<script type="text/javascript" src="http://123.56.106.187:8010/Scripts/listjs/jquery-1.7.2.min.js"></script>-->
+<!--<script>-->
+<!--//判断浏览器是否支持HTML5 Canvas-->
+<!--window.onload = function () {-->
+<!--try {-->
+<!--//动态创建一个canvas元 ，并获取他2Dcontext。如果出现异常则表示不支持 document.createElement("canvas").getContext("2d");-->
+<!--// document.getElementById("support").innerHTML = "浏览器支持HTML5 CANVAS";-->
+<!--}-->
+<!--catch (e) {-->
+<!--// document.getElementByIdx("support").innerHTML = "浏览器不支持HTML5 CANVAS";-->
+<!--}-->
+<!--};-->
+<!--//这段代 主要是获取摄像头的视频流并显示在Video 签中-->
+<!--window.addEventListener("DOMContentLoaded", function () {-->
+<!--var canvas = document.getElementById("canvas"),-->
+<!--context = canvas.getContext("2d"),-->
+<!--video = document.getElementById("video"),-->
+<!--videoObj = {"video": true},-->
+<!--errBack = function (error) {-->
+<!--console.log("Video capture error: ", error.code);-->
+<!--};-->
+<!--$("#snap").click(function () {-->
+<!--context.drawImage(video, 0, 0, 330, 250);-->
+<!--})-->
+<!--//navigator.getUserMedia这个写法在Opera中好像是navigator.getUserMedianow-->
+<!--if (navigator.getUserMedia) {-->
+<!--navigator.getUserMedia(videoObj, function (stream) {-->
+<!--video.src = stream;-->
+<!--video.play();-->
+<!--}, errBack);-->
+<!--} else if (navigator.webkitGetUserMedia) {-->
+<!--navigator.webkitGetUserMedia(videoObj, function (stream) {-->
+<!--video.src = window.webkitURL.createObjectURL(stream);-->
+<!--video.play();-->
+<!--}, errBack);-->
+<!--}-->
+
+<!--}, false);-->
+
+<!--//上传服务器-->
+<!--function CatchCode() {-->
+<!--var canvans = document.getElementById("canvas");-->
+<!--//获取浏览器页面的画布对象-->
+<!--//以下开始编 数据-->
+<!--var imgData = canvans.toDataURL();-->
+<!--//将图像转换为base64数据-->
+<!--var base64Data = imgData.substr(22);-->
+<!--//在前端截取22位之后的字符串作为图像数据-->
+<!--//开始异步上-->
+<!--$.post("uploadImgCode.ashx", {"img": base64Data}, function (data, status) {-->
+<!--if (status == "success") {-->
+<!--if (data == "OK") {-->
+<!--alert("二维 已经解析");-->
+<!--}-->
+<!--else {-->
+<!--// alert(data);-->
+<!--}-->
+<!--}-->
+<!--else {-->
+<!--alert("数据上 失败");-->
+<!--}-->
+<!--}, "text");-->
+<!--}-->
+<!--</script>-->
+<!--</head>-->
+<!--<body>-->
+<!--<div id="contentHolder">-->
+<!--<video id="video" width="320" height="320" autoplay>-->
+<!--</video>-->
+<!--<input type="button" id="snap" style="width:100px;height:35px;" value="拍 照"/>-->
+<!--<canvas style="" id="canvas" width="320" height="320">-->
+<!--</canvas>-->
+<!--</div>-->
+<!--</body>-->
+<!--</html>-->
+
 <html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title></title>
-    <script type="text/javascript" src="http://123.56.106.187:8010/Scripts/listjs/jquery-1.7.2.min.js"></script>
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type">
     <script>
-        //判断浏览器是否支持HTML5 Canvas
-        window.onload = function () {
-            try {
-//动态创建一个canvas元 ，并获取他2Dcontext。如果出现异常则表示不支持 document.createElement("canvas").getContext("2d");
-// document.getElementById("support").innerHTML = "浏览器支持HTML5 CANVAS";
-            }
-            catch (e) {
-// document.getElementByIdx("support").innerHTML = "浏览器不支持HTML5 CANVAS";
-            }
-        };
-        //这段代 主要是获取摄像头的视频流并显示在Video 签中
-        window.addEventListener("DOMContentLoaded", function () {
-            var canvas = document.getElementById("canvas"),
-                    context = canvas.getContext("2d"),
-                    video = document.getElementById("video"),
-                    videoObj = {"video": true},
-                    errBack = function (error) {
-                        console.log("Video capture error: ", error.code);
-                    };
-            $("#snap").click(function () {
-                context.drawImage(video, 0, 0, 330, 250);
-            })
-//navigator.getUserMedia这个写法在Opera中好像是navigator.getUserMedianow
-            if (navigator.getUserMedia) {
-                navigator.getUserMedia(videoObj, function (stream) {
-                    video.src = stream;
-                    video.play();
-                }, errBack);
-            } else if (navigator.webkitGetUserMedia) {
-                navigator.webkitGetUserMedia(videoObj, function (stream) {
-                    video.src = window.webkitURL.createObjectURL(stream);
-                    video.play();
-                }, errBack);
-            }
 
-        }, false);
-
-        //上传服务器
-        function CatchCode() {
-            var canvans = document.getElementById("canvas");
-//获取浏览器页面的画布对象
-//以下开始编 数据
-            var imgData = canvans.toDataURL();
-//将图像转换为base64数据
-            var base64Data = imgData.substr(22);
-//在前端截取22位之后的字符串作为图像数据
-//开始异步上
-            $.post("uploadImgCode.ashx", {"img": base64Data}, function (data, status) {
-                if (status == "success") {
-                    if (data == "OK") {
-                        alert("二维 已经解析");
-                    }
-                    else {
-// alert(data);
-                    }
-                }
-                else {
-                    alert("数据上 失败");
-                }
-            }, "text");
+        function testDiv() {
+            document.getElementById("show").innerHTML = document.getElementsByTagName("html")[0].innerHTML;
         }
+
+//        render(){
+//
+//        }
+        function testClick() {
+            var str1 = document.getElementById("text1").value;
+            var str2 = document.getElementById("text2").value;
+            render();
+            //发送消息给java代码
+            var data = "name=" + str1 + ",pass=" + str2;
+
+            window.WebViewJavascriptBridge.send(
+                    data
+                    , function(responseData) {
+
+                        document.getElementById("show").innerHTML = "repsonseData from java, data = " +responseData
+                    }
+            );
+
+        }
+
+        function testClick1() {
+            var str1 = document.getElementById("text1").value;
+            var str2 = document.getElementById("text2").value;
+            render();
+            //调用本地java方法
+            window.WebViewJavascriptBridge.callHandler(
+                    'submitFromWeb'
+                    , {'param': str1}
+                    , function(responseData) {
+                        document.getElementById("show").innerHTML = "send get responseData from java, data = " + responseData
+                    }
+            );
+        }
+
+        function bridgeLog(logContent) {
+            document.getElementById("show").innerHTML = logContent;
+        }//注册事件监听
+        function connectWebViewJavascriptBridge(callback) {
+            if (window.WebViewJavascriptBridge) {
+                callback(WebViewJavascriptBridge)
+            } else {
+                document.addEventListener(
+                        'WebViewJavascriptBridgeReady'
+                        , function() {
+                            callback(WebViewJavascriptBridge)
+                        },
+                        false
+                );
+            }
+        }
+        //注册回调函数，第一次连接时调用 初始化函数
+        connectWebViewJavascriptBridge(function(bridge) {
+            bridge.init(function(message, responseCallback) {
+                console.log('JS got a message', message);
+                var data = {
+                    'Javascript Responds': 'Wee!'
+                };
+                console.log('JS responding with', data);
+                responseCallback(data);
+            });
+
+            bridge.registerHandler("functionInJs", function(data, responseCallback) {
+                document.getElementById("show").innerHTML = ("data from Java: = " + data);
+                var responseData = "Javascript Says Right back aka!";
+                responseCallback(responseData);
+            });
+        })
     </script>
+    <title>
+        hello my sample
+    </title>
 </head>
+
 <body>
-<div id="contentHolder">
-    <video id="video" width="320" height="320" autoplay>
-    </video>
-    <input type="button" id="snap" style="width:100px;height:35px;" value="拍 照"/>
-    <canvas style="" id="canvas" width="320" height="320">
-    </canvas>
-</div>
+<p>
+    <xmp id="show">
+    </xmp>
+</p>
+<p>
+    <xmp id="init">
+    </xmp>
+</p>
+<p>
+    <input type="text" id="text1" value="用户名(username)"/>
+</p>
+
+<p>
+    <input type="text" id="text2" value="password"/>
+</p>
+
+<p>
+    <input type="button" id="enter" value="发消息给Native" onclick="testClick();"
+            />
+</p>
+
+<p>
+    <input type="button" id="enter1" value="调用Native方法" onclick="testClick1();"
+            />
+</p>
+
+<p>
+    <input type="button" id="enter2" value="显示html" onclick="testDiv();"/>
+</p>
+
+<p>
+    <input type="file" value="打开文件"/>
+</p>
 </body>
+
 </html>

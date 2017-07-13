@@ -52,11 +52,12 @@ var funWebSvr = function (req, res) {
     if (pathName.charAt(pathName.length - 1) == "/") {
 
         pathName += "photo.html";
+        //pathName += "location_test1.html";
     }
 
     var params = [];
     params = libUrl.parse(req.url,true).query;
-    console.log(params.toString());
+    //console.log(params.toString());
 
     var filePath = libPath.join("./WebRoot", pathName);
 
@@ -88,9 +89,9 @@ webSvr.on("error", function (error) {
     console.log(error);
 });
 
-webSvr.listen(8124, function () {
+webSvr.listen(3000, function () {
 
-    console.log('[WebSvr][Start] running at http://127.0.0.1:8124/');
+    console.log('[WebSvr][Start] running at http://127.0.0.1:3000/');
 
     console.timeEnd('[WebSvr][Start]');
 }); 
