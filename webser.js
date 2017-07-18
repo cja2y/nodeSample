@@ -42,8 +42,11 @@ var funGetContentType = function (filePath) {
 var funWebSvr = function (req, res) {
     var reqUrl = req.url;
 
-    console.log(reqUrl);
-
+    req.on('data',function (data) {
+        console.log(decodeURIComponent(data));
+    });
+   // console.log(reqUrl);
+   // console.log(req.data);
     var pathName = libUrl.parse(reqUrl).pathname;
     if (libPath.extname(pathName) == "") {
 
@@ -81,17 +84,32 @@ var funWebSvr = function (req, res) {
             res.end("<h1>404 Not Found</h1>");
         }
     });
-}
+    
+    // req.addListener('data',function (data) {
+    //     console.log(decodeURIComponent(data));
+    // })
+};
 
 var webSvr = libHttp.createServer(funWebSvr);
+var reqSvr = libHttp.createServer(function (req,res) {
+   req.on("data",function (data) {
+       console.log(decodeURIComponent(data));
+   })
+});
 
 webSvr.on("error", function (error) {
     console.log(error);
 });
-
+// webSvr.on('data',function (data) {
+//     console.log("test");
+//     console.log(decodeURIComponent(data));
+// });
 webSvr.listen(3000, function () {
 
     console.log('[WebSvr][Start] running at http://127.0.0.1:3000/');
 
     console.timeEnd('[WebSvr][Start]');
-}); 
+});
+// reqSvr.listen(3001,function () {
+//     console.log('[WebSvr][Start] running at http://127.0.0.1:3001/');
+// });
