@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="84403467-79e9-4901-9180-6a39c1138979" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+    <list default="true" id="84403467-79e9-4901-9180-6a39c1138979" name="Default" comment="123">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/personalSite/index.html" afterPath="$PROJECT_DIR$/personalSite/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/webser.js" afterPath="$PROJECT_DIR$/webser.js" />
     </list>
     <ignored path="node_1.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -35,10 +33,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="webser.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="webser.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/webser.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-268">
+            <state relative-caret-position="750">
               <caret line="50" column="10" lean-forward="true" selection-start-line="50" selection-start-column="10" selection-end-line="50" selection-end-column="10" />
               <folding />
             </state>
@@ -97,11 +95,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/personalSite/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="166">
-              <caret line="84" column="12" lean-forward="true" selection-start-line="84" selection-start-column="12" selection-end-line="84" selection-end-column="12" />
+            <state relative-caret-position="371">
+              <caret line="110" column="75" lean-forward="false" selection-start-line="110" selection-start-column="75" selection-end-line="110" selection-end-column="75" />
               <folding />
             </state>
           </provider>
@@ -375,7 +373,7 @@
       <workItem from="1499765128631" duration="4357000" />
       <workItem from="1499838679299" duration="1237000" />
       <workItem from="1499913450656" duration="6994000" />
-      <workItem from="1500274830480" duration="12554000" />
+      <workItem from="1500274830480" duration="12849000" />
     </task>
     <task id="LOCAL-00001" summary="123">
       <created>1468230673602</created>
@@ -391,11 +389,18 @@
       <option name="project" value="LOCAL" />
       <updated>1499913549849</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="123">
+      <created>1500357043268</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1500357043268</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="25142000" />
+    <option name="totallyTimeSpent" value="25437000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1" y="23" width="1440" height="817" extended-state="0" />
@@ -797,18 +802,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/webser.js">
+    <entry file="file://$PROJECT_DIR$/personalSite/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-268">
-          <caret line="50" column="10" lean-forward="true" selection-start-line="50" selection-start-column="10" selection-end-line="50" selection-end-column="10" />
+        <state relative-caret-position="371">
+          <caret line="110" column="75" lean-forward="false" selection-start-line="110" selection-start-column="75" selection-end-line="110" selection-end-column="75" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/personalSite/index.html">
+    <entry file="file://$PROJECT_DIR$/webser.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="166">
-          <caret line="84" column="12" lean-forward="true" selection-start-line="84" selection-start-column="12" selection-end-line="84" selection-end-column="12" />
+        <state relative-caret-position="750">
+          <caret line="50" column="10" lean-forward="true" selection-start-line="50" selection-start-column="10" selection-end-line="50" selection-end-column="10" />
           <folding />
         </state>
       </provider>
