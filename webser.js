@@ -62,7 +62,7 @@ var funWebSvr = function (req, res) {
     params = libUrl.parse(req.url,true).query;
     //console.log(params.toString());
 
-    var filePath = libPath.join("./personalSite", pathName);
+    var filePath = libPath.join("./myWeb", pathName);
 
     fs.exists(filePath, function (exists) {
         if (exists) {
