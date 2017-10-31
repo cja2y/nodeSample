@@ -1,0 +1,13 @@
+<option value="" selected="true" disabled="true">请选择描述</option>
+<option value='2'>钉眼明显</option>
+<option value='3'>与墙面拼缝宽度不一致或过宽</option>
+<option value='4'>污染</option>
+<option value='5'>破损</option>
+<option value='6'>转角不方正</option>
+<option value='7'>拼缝毛糙、不平整、不均匀</option>
+<option value='8'>松动</option>
+<option value='9'>与门贴脸缝隙大</option>
+<option value='10'>接头过多</option>
+<option value='11'>脱落</option>
+<option value='12'>转角不美观</option>
+<option value='13'>其他</option>

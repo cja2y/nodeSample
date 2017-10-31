@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0056)http://cdn.zampdsp.com/v3/static/v5/vah5.htm#lab=225_450 -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<style type="text/css">
+html,body{margin:0px;padding:0px;border:0px}
+</style>
+</head>
+<body>
+<script>
+var _visibleInter=30
+	,_hiddenInter=200
+	,_last=new Date().getTime()
+	,_checkedRound=0
+	,_visibleRound=15;
+function _getQuery(_s){
+	var _reg=new RegExp('[?&#]'+_s+'=([^&]*)')
+		_r=(document.location.href).match(_reg);
+	if(!_r)return;
+	return decodeURIComponent(_r[1]);
+}
+var _timer=setInterval(function(){
+	var _now=new Date().getTime();
+	//console.log(_now-_last)
+	if(_now-_last<_hiddenInter){
+		_checkedRound++;
+	}else{
+		_checkedRound=0;
+	}
+	_last=_now;
+	if(_checkedRound>=_visibleRound){
+		try{
+			var _command={
+				v_status:1
+				,v_flag:_getQuery('lab')||''
+			}
+			parent.postMessage(_command,'*');
+		}catch(e){}
+		clearInterval(_timer);
+	}
+},_visibleInter);
+
+
+</script>
+
+
+</body></html>

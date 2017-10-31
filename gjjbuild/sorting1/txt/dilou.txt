@@ -1,0 +1,10 @@
+<option value="" selected="true" disabled="true">请选择描述</option>
+<option value='2'>排水不正常</option>
+<option value='3'>异味</option>
+<option value='4'>异响</option>
+<option value='5'>安装不牢固</option>
+<option value='6'>地漏盖生锈</option>
+<option value='7'>地漏盖缺失</option>
+<option value='8'>错位</option>
+<option value='9'>跨缝</option>
+<option value='10'>其他</option>

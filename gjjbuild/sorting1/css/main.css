@@ -1,0 +1,22 @@
+.demo{
+    width: 90%;
+    margin: auto;
+    margin-top: 10%;
+}
+input {
+    background-color: #f6f6f6;
+}
+select {
+    border: none;
+    width: 100%;
+    background-color: #F6F6F6;
+    border-bottom: 1px solid #c7c7c7;
+    margin: 8px 0 8px 0!important;
+    color: #7d7d7d;
+    border-radius: 0;
+    font-size: 1.0em;
+    line-height: 2.0em;
+}
+select option {
+    border: none;
+}

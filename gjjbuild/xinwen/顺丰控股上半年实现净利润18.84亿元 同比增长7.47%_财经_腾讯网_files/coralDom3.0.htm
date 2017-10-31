@@ -1,0 +1,379 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" class="mode_dark">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=gb2312"/>
+    <title>评论组件</title>
+    <script type="text/javascript" src="//mat1.gtimg.com/www/js/jquery/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="//mat1.gtimg.com/news/niuping/coral_v3.94_3.js"></script>
+    <script type="text/javascript" src="//mat1.gtimg.com/www/coral2.0/js/wmx1.6.3.min.js"></script>
+    <link rel="stylesheet" href="//mat1.gtimg.com/www/coral3.0/css/coral_v9.6.7.1_1.css"/>
+    <link rel="stylesheet" href="//mat1.gtimg.com/www/coral3.0/css/coralImg.css?201501"/>
+
+
+</head>
+
+<body>
+
+
+<style type="text/css">
+
+    #top_reply h1 span {
+        float: left;
+        font-size: 13px;
+        margin-left: 10px;
+        color: #c2c0c0
+    }
+
+    #top_reply h1 span a:hover {
+        color: #df7070
+    }
+
+    #top_reply h1 span a {
+        color: #c2c0c0;
+        font-size: 13px
+    }
+
+</style>
+
+
+<div id="mainBody" class="np-frame" style='padding-bottom:0px'>
+
+    <!----评论框---->
+
+    <div id="top_reply">
+
+        <h1 class="np-title">
+            <a href="javascript:void(0)" id='commentTotleNum' target='_blank'></a>
+            <a href="http://www.qq.com/coral/coralindex/indexCoral_new.htm" target="_blank"
+               class="np-index-link">腾讯牛评</a>
+            <strong>网友评论</strong>
+            <span>文明上网理性发言，请遵守<a href="http://www.qq.com/coral/coralBeta2/coralinfo.htm"
+                                 target="_blank">新闻评论服务协议</a></span>
+        </h1>
+
+        <div id="commentArea" class='out'>
+
+            <div class="np-reply-box blueLight np-reply-box-active" id="np-reply-box" style="">
+
+                <div class="np-reply-box-content textarea">
+                    <textarea tabindex="1" autocomplete="off" name="content" accesskey="u" id="top_textarea"></textarea>
+                </div>
+
+                <div id="insertPicList" class="box_inner" style="display: none;">
+                    <ul class="insert_piclist cf" style="display: block;">
+                        <li class="list_item upAddPic"><a href="javascript:void(0)" class="add_pic"><i class="add">+</i></a>
+                            <form action="//upload.coral.qq.com/image/upload" method="post"
+                                  enctype="multipart/form-data" target="iframe0" id="form10">
+                                <input type="file" class="add_file" name="picture" accept="image/*">
+
+                                <input name="thrdes" type="hidden" value="insertPicList">
+                                <input name="type" type="hidden" value="1">
+                                <input name="format" type="hidden" value="SCRIPT">
+                                <input name="callback" type="hidden" value="parent.upLoadImg">
+                                <input name="_method" type="hidden" value="put">
+                                <!-- <input name="plat" type="hidden" value="1"> -->
+                                <input name="g_tk" type="hidden" value="">
+                                <input name="code" type="hidden" value="0">
+                                <input name="source" type="hidden" value="1">
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="commtSub np-reply-box-footer" style="position:relative;display:block;height:40px"
+                     id="p_login_btn">
+                    <!-- 用户登录模块 -->
+
+                    <div class="np-login" id="loginFlag">
+
+                        <img width="35" height="35" class="np-avatar" src=''>
+                        <span class="">
+                                <em class="np-user"></em>
+                                <a class="" href="http://film.qq.com/vip.html" target='_blank'></a>
+                            </span>
+                        <a href="javascript:void(0)" class="np-btn change">切换帐户</a>
+                        <span class="mod_post_list">
+                                <!-- <span class="list_item" id="sybol_face"><i class="icon_face" style="background-image: url(http://mat1.gtimg.com/www/bar/images/sprite_edit.png);">&#9786;</i>表情</span> -->
+                                <span class="list_item sybol_pic" id="sybol_pic"><i class="icon_pic"></i>图片
+                                    <form action="//upload.coral.qq.com/image/upload" method="post"
+                                          enctype="multipart/form-data" target="iframe0" id="form11">
+                                    <input type="file" name="picture" accept="image/*" class="add_file">
+
+                                    <input name="thrdes" type="hidden" value="insertPicList">
+                                    <input name="type" type="hidden" value="1">
+                                    <input name="format" type="hidden" value="SCRIPT">
+                                    <input name="callback" type="hidden" value="parent.upLoadImg">
+                                    <input name="_method" type="hidden" value="put">
+                                        <!-- <input name="plat" type="hidden" value="1"> -->
+                                    <input name="g_tk" type="hidden" value="">
+                                    <input name="code" type="hidden" value="0">
+                                    <input name="source" type="hidden" value="1">
+                                </form>
+
+                                </span>
+                            <!-- <span style="color: #999;">(支持jpg、jpeg、png、gif 格式，大小2M以内)</span> -->
+                            </span>
+                    </div>
+
+                    <div class='submitBtn'>
+
+                        <a href="javascript:void(0)" class="np-btn np-btn-submit" id="top_post_btn">登录</a>
+                        <span class="np-tip-error" style="display:none"></span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!----评论显示列表---->
+
+    <div id="content">
+        <ul class="np-nav-tab">
+            <li id="myAllComment" class="np-active">全部评论</li>
+            <li id="myCowComment">我的牛评
+                <span id="popMsg" class="np-tip-num"></span>
+            </li>
+            <li id="linshi" style="float:right"><a href="http://www.qq.com/coral/coralindex/indexCoral_new.htm"
+                                                   target="_blank">牛评：纵论天下大事</a>
+            </li>
+            <!---->
+        </ul>
+
+        <div id="tab1_allComments">
+            <!--页卡一 全部评论-->
+
+            <div id="order" class="np-order np-btngroup"><a data-sort="time" href="javascript:void(0)"
+                                                            class="np-active">时间</a><a data-sort="quality"
+                                                                                       href="javascript:void(0)">热度</a>
+            </div>
+            <!--推荐评论-->
+
+
+            <div id="showNum" class="showNum">
+
+                <span></span>
+
+            </div>
+
+            <div id='allComments'>
+
+                <ul class="post-list np-comment-list"></ul>
+                <div class="tipInfo waitting"></div>
+                <!--loadding图标-->
+
+            </div>
+            <!-- 全部评论 -->
+
+
+            <div id="loadMore" class="np-load-more">
+
+                <span>加载更多</span>
+                <em style="display:none">没有更多了</em>
+
+            </div>
+
+        </div>
+
+        <div id="tab2_myComments" class=" my-comments" style="display:none">
+            <!--页卡二 我的牛评-->
+            <div class="np-btngroup np-btngroup-notice"><a href="javascript:void(0)" id='mytips'
+                                                           class="np-active">提醒</a><a id='mycon'
+                                                                                      href="javascript:void(0)">评论</a>
+            </div>
+
+            <div id="tab3_tips" class='dis'>
+
+                <div id="my-message" class="my-message">
+
+                    <div class="tipInfo waitting">
+
+                    </div>
+
+
+                    <ul id="my-message-list" class="post-list np-notice-list">
+
+                    </ul>
+
+                    <div class="np-load-more" id="loadMsgMore" style="display:none">
+                        <span>加载更多</span>
+                        <em style="display:none">没有更多了</em>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div id="tab4_mycon" style="display:none" class='undis'>
+
+
+                <div id="my-notification" class="my-notification ">
+
+                    <div class="tipInfo waitting">
+
+                    </div>
+                    <div class="np-person-info np-person-info-weak" id='myuserInfo' style="display:none">
+                        <img class="np-avatar" src="">
+                        <span class="">
+                                <em class="np-user">企鹅先生</em>
+                                <a class="" href="http://film.qq.com/vip/index.html?ptag=v_qq_com.comment"
+                                   target='_blank'></a>
+                            </span>
+                        <div>
+                                <span class='np-btn-area'>
+                                    <em class="a">中国 北京 海淀</em>
+                                </span>
+                            <span class='np-btn-upvote'>
+                                    <em class="b">0</em>
+                                </span>
+                            <span class='np-btn-reply'>
+                                    <em class="c">1</em>
+                                </span>
+                        </div>
+                    </div>
+                    <ul id="my-notification-list" class="post-list np-timeline">
+
+                    </ul>
+
+
+                    <div class="np-load-more" id="loadCmtMore">
+
+                        <span>加载更多</span>
+                        <em style="display:none">没有更多了</em>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div id="hiddenCon" class="hiddenCon" style="display:none">
+
+
+    </div>
+
+    <!--弹出举报框-->
+
+
+    <div class="np-report" id='public_report' style="display:none">
+        <div class="np-report-header">
+            <h4>举报</h4>
+            <a href="javascript:void(0)" class='close'></a>
+        </div>
+        <div class="np-report-content">
+            <h5>
+                <img src="//mat1.gtimg.com/www/coral2.0/images/transparent.gif"/>您为什么要举报此信息?</h5>
+            <ul>
+                <li>
+                    <input name="impeach_content" id="content1" type="radio" value="1"/>
+                    <label for="content1">色情淫秽</label>
+                </li>
+
+                <li>
+                    <input name="impeach_content" id="content4" type="radio" value="8"/>
+                    <label for="content4">骚扰谩骂</label>
+                </li>
+
+                <li>
+                    <input name="impeach_content" id="content1024" type="radio" value="1024"/>
+                    <label for="content1024">广告欺诈</label>
+                </li>
+
+                <li>
+                    <input name="impeach_content" id="content16384" type="radio" value="2048"/>
+                    <label for="content16384">反动</label>
+                </li>
+                <li>
+                    <input name="impeach_content" id="content0" type="radio" value="0"/>
+                    <label for="content0">其他</label>
+                </li>
+            </ul>
+            <div>
+                <h6>举报说明（可选）：</h6>
+                <input name="impeach_desc" value="描述恶意行为" style=" color:#bbb;" id="impeach_desc" type="text"
+                       maxlength="200/"/>
+            </div>
+        </div>
+        <div class="np-report-footer">
+            <a class="np-btn np-report-submit" href="javascript:void(0)">提交</a>
+            <a class="np-btn np-report-cancel" href="javascript:void(0)">取消</a>
+        </div>
+    </div>
+
+
+    <!--弹出评论框-->
+
+    <div class="pop_reply np-reply-box np-reply-box-inline" id="public_reply" style="display:none">
+
+        <div class="textarea np-reply-box-content">
+            <textarea tabindex="1" autocomplete="off" name="content" accesskey="u" id="top_textarea"></textarea>
+        </div>
+        <div id="insertPicList_reply" class="box_inner" style="display: none;">
+            <ul class="insert_piclist cf" style="display: block;">
+                <li class="list_item upAddPic"><a href="javascript:void(0)" class="add_pic"><i class="add">+</i></a>
+                    <form action="//upload.coral.qq.com/image/upload" method="post" enctype="multipart/form-data"
+                          target="iframe0" id="form10">
+                        <input type="file" class="add_file" name="picture" accept="image/*">
+
+                        <input name="thrdes" type="hidden" value="insertPicList">
+                        <input name="type" type="hidden" value="1">
+                        <input name="format" type="hidden" value="SCRIPT">
+                        <input name="callback" type="hidden" value="parent.upLoadImg">
+                        <input name="_method" type="hidden" value="put">
+                        <!-- <input name="plat" type="hidden" value="1"> -->
+                        <input name="g_tk" type="hidden" value="">
+                        <input name="code" type="hidden" value="0">
+                        <input name="source" type="hidden" value="1">
+                    </form>
+                </li>
+            </ul>
+        </div>
+        <div class="commtSub" id="p_login_btn">
+            <div class='np-reply-box-footer'>
+                <div class="np-reply-box-info" style="display:none">
+                         <span class="list_item sybol_pic" id="sybol_pic_reply" style="display:"><i
+                                 class="icon_pic"></i>图片
+                                    <form action="//upload.coral.qq.com/image/upload" method="post"
+                                          enctype="multipart/form-data" target="iframe0" id="form12">
+                                    <input type="file" class="add_file" name="picture" accept="image/*">
+                                    <input name="thrdes" type="hidden" value="insertPicList">
+                                    <input name="type" type="hidden" value="1">
+                                    <input name="format" type="hidden" value="SCRIPT">
+                                    <input name="callback" type="hidden" value="parent.upLoadImg">
+                                    <input name="_method" type="hidden" value="put">
+                                        <!-- <input name="plat" type="hidden" value="1"> -->
+                                    <input name="g_tk" type="hidden" value="">
+                                    <input name="code" type="hidden" value="0">
+                                    <input name="source" type="hidden" value="1">
+                                </form>
+                            </span>
+                    <span class="tips"></span>
+                </div>
+                <a href="javascript:void(0)" class="submit np-btn np-btn-submit" id="pop_post_btn">登录</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--遮罩层-->
+<div class='maskObj' id='maskObj'>
+</div>
+
+<script tpye='text/javascript' src='//js.aq.qq.com/js/aq_common.js'></script>
+
+</body>
+
+</html>
+<!--[if !IE]>|xGv00|f8cf3b0ae732bc74de71b0cf8c1bb158<![endif]-->

@@ -1,0 +1,8 @@
+<option value="" selected="true" disabled="true">请选择描述</option>
+<option value='2'>管道破损</option>
+<option value='3'>堵塞</option>
+<option value='4'>渗漏</option>
+<option value='5'>检修盖不密实</option>
+<option value='6'>接头连接不牢固、脱节（导致漏水）</option>
+<option value='7'>内牙破裂</option>
+<option value='8'>其他</option>

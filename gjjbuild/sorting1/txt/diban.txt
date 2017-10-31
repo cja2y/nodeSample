@@ -1,0 +1,12 @@
+<option value="" selected="true" disabled="true">请选择描述</option>
+<option value='2'>色差严重</option>
+<option value='3'>破损、划痕</option>
+<option value='4'>拼缝间隙过大</option>
+<option value='5'>行走异常</option>
+<option value='6'>蹬地冒灰</option>
+<option value='7'>大小头</option>
+<option value='8'>松动空鼓</option>
+<option value='9'>发黑</option>
+<option value='10'>短板</option>
+<option value='11'>防潮棉反边不够</option>
+<option value='12'>其他</option>

@@ -1,0 +1,10 @@
+<option value="" selected="true" disabled="true">请选择描述</option>
+<option value='2'>灯位无法通电</option>
+<option value='3'>灯位涂料污染</option>
+<option value='4'>灯带光影不均匀（宽窄偏差很大）</option>
+<option value='5'>灯罩破损</option>
+<option value='6'>镇流器故障</option>
+<option value='7'>灯管损坏</option>
+<option value='8'>灯光色差</option>
+<option value='9'>断电闪烁</option>
+<option value='10'>其他</option>

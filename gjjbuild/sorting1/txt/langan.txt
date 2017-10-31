@@ -1,0 +1,8 @@
+<option value="" selected="true" disabled="true">请选择描述</option>
+<option value='2'>铝合金污染</option>
+<option value='3'>铝合金划伤</option>
+<option value='4'>玻璃划伤</option>
+<option value='5'>玻璃污染</option>
+<option value='6'>与墙体交接处收口粗糙</option>
+<option value='7'>松动</option>
+<option value='8'>其他</option>

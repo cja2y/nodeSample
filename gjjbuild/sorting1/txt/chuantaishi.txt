@@ -1,0 +1,10 @@
+<option value="" selected="true" disabled="true">请选择描述</option>
+<option value='dilou'>断裂</option>
+<option value='3'>拼缝高低差</option>
+<option value='4'>表面划伤、破损</option>
+<option value='5'>收口不美观</option>
+<option value='6'>表面污染</option>
+<option value='7'>发黑</option>
+<option value='8'>色差</option>
+<option value='9'>修不明显</option>
+<option value='10'>其他</option>

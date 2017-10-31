@@ -1,0 +1,4268 @@
+/*code by 2013.6.17  15:32 chuangwang*/
+/*最后更新时间 by 2013.6.18  17:05*/
+/*最后更新时间 by 2013.6.20  12:42*/
+/*最后更新时间 by 2013.6.20  17:76*/
+/*最后更新时间 by 2013.6.24  15:17*/
+/*最后更新时间 by 2013.6.25  11:18*/
+/*最后更新时间 by 2013.6.25  17:18  beta v1.0*/
+/*最后更新时间 by 2013.6.26  20:26  beta v2.0*/
+/*最后更新时间 by 2013.6.27  15:26  beta v3.0*/
+/*最后更新时间 by 2013.6.28  11:29  beta v4.0*/ // 修改了实时接口拉去方式
+/*最后更新时间 by 2013.7.01  11:29  beta v5.0*/ //
+/*最后更新时间 by 2013.7.04  17:58  beta v5.0*/ //  更新了trigger不支持bug update时间bug
+/*最后更新时间 by 2013.7.04  20:39  beta v5.0*/ //  更新了 遮罩层、弹出层获取数据方式
+/*最后更新时间 by 2013.7.011  18:36  beta v5.0*/
+/*最后更新时间 by 2013.11.13  15:13  -- 弹出层分离 N 多优化*/
+/*最后更新时间 2015.10.29  by v_xilixu  更改方法upLoadImg里的语句，修复上传大于5M图片没有提示的bug，导致原因是接口有变*/
+/*最后更新时间 2016.5.17  by zenli  增加话题入口功能*/
+/*最后更新时间 2016.6.12  by huihuihuang  https改造*/
+//微博拉取和发布接口的主机地址
+//var curHost = 'coral.qq.com';
+document.domain = 'qq.com';
+var v20140624;
+
+var upLoadImgError; // 上传图片20秒超时
+/*********************************************
+ toggleFullScreen()
+ *********************************************/
+function toggleFullScreen() {
+    var doc = top.document
+    if (!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
+        if (doc.documentElement.requestFullscreen) {
+            doc.documentElement.requestFullscreen();
+        } else if (doc.documentElement.msRequestFullscreen) {
+            doc.documentElement.msRequestFullscreen();
+        } else if (doc.documentElement.mozRequestFullScreen) {
+            doc.documentElement.mozRequestFullScreen();
+        } else if (doc.documentElement.webkitRequestFullscreen) {
+            doc.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+        }
+    } else {
+        if (doc.exitFullscreen) {
+            doc.exitFullscreen();
+        } else if (doc.msExitFullscreen) {
+            doc.msExitFullscreen();
+        } else if (doc.mozCancelFullScreen) {
+            doc.mozCancelFullScreen();
+        } else if (doc.webkitExitFullscreen) {
+            doc.webkitExitFullscreen();
+        }
+    }
+}
+
+
+/*
+ * jQuery cookie plugin
+ * 已设置默认设置（config.defaults），domain=qq.com，path=/
+ */
+(function($, document, undefined) {
+    var pluses = /\+/g;
+
+    function raw(s) {
+        return s;
+    }
+
+    function decoded(s) {
+        return decodeURIComponent(s.replace(pluses, ' '));
+    }
+    var config = $.cookie = function(key, value, options) {
+        // write
+        if (value !== undefined) {
+            options = $.extend({}, config.defaults, options);
+            if (value === null) {
+                options.expires = -1;
+            }
+            if (typeof options.expires === 'number') {
+                var days = options.expires,
+                    t = options.expires = new Date();
+                t.setDate(t.getDate() + days);
+            }
+            value = config.json ? JSON.stringify(value) : String(value);
+            return (document.cookie = [
+                encodeURIComponent(key), '=', config.raw ? value : encodeURIComponent(value),
+                options.expires ? '; expires=' + options.expires.toUTCString() : '', // use expires attribute, max-age is not supported by IE
+                options.path ? '; path=' + options.path : '',
+                options.domain ? '; domain=' + options.domain : '',
+                options.secure ? '; secure' : ''
+            ].join(''));
+        }
+        // read
+        var decode = config.raw ? raw : decoded;
+        var cookies = document.cookie.split('; ');
+        for (var i = 0, parts;
+             (parts = cookies[i] && cookies[i].split('=')); i++) {
+            if (decode(parts.shift()) === key) {
+                var cookie = decode(parts.join('='));
+                return config.json ? JSON.parse(cookie) : cookie;
+            }
+        }
+        return null;
+    };
+    config.defaults = {
+        domain: 'qq.com',
+        path: '/',
+        expires: 7
+    };
+    $.removeCookie = function(key, options) {
+        if ($.cookie(key) !== null) {
+            $.cookie(key, null, options);
+            return true;
+        }
+        return false;
+    };
+})(jQuery, document);
+
+
+/***
+ 切换浏览器tab，判断当前tab是否活跃
+ ***/
+
+(function(g, h, $, b) {
+    var e, i, f = 'onfocusin' in h && 'hasFocus' in h ? 'focusin focusout' : 'focus blur',
+        d = ['', 'moz', 'ms', 'o', 'webkit'],
+        c = $.support,
+        a = $.event;
+    while ((i = e = d.pop()) != b) {
+        i = (e ? e + 'H' : 'h') + 'idden';
+        if (c.pageVisibility = typeof h[i] == 'boolean') {
+            f = e + 'visibilitychange';
+            break
+        }
+    }
+    $(/blur$/.test(f) ? g : h).bind(f,
+        function(m) {
+            var l = m.type,
+                j = m.originalEvent,
+
+                k = j.toElement;
+
+            if (!/^focus./.test(l) || (k == b && j.fromElement == b && j.relatedTarget == b)) {
+                a.trigger((i && h[i] || /^(?:blur|focusout)$/.test(l) ? 'hide' : 'show') + '.visibility')
+            }
+        })
+}(this, document, jQuery));
+
+
+
+(typeof $ != 'undefined' && $.noConflict && typeof jQuery != 'object') && $.noConflict();
+var coralComment = {}
+jQuery(document).ready(function() {
+
+    (function($) {
+
+        var beta = '6.0';
+        var $doc = $(document);
+        var $parent = $(parent.document) || ''; // iframe 情况
+        var $win = $(window);
+        var $body = $('body');
+        var __uin = null; //记录当前用户的uin
+        var maxID = "";
+        var defaultHeadPic = '//mat1.gtimg.com/www/coral2.0/images/g.gif';
+        var newsUrl = location.protocol + '//' + location.host + location.pathname;
+        var tabsFlag = 'true';
+        var cmt_id = cmt_id || parent.cmt_id;
+
+        /**
+         * 用于识别当前频道等
+         */
+
+            //var curSite = newsUrl.match(/https?:\/\/([^\.]+)/)[1];
+
+        var curSite = '';
+
+        if ((top.location.host).split('.')[0] == 'www') {
+            curSite = (top.location.host).split('.')[1];
+        } else {
+            curSite = (top.location.host).split('.')[0];
+        }
+        coralComment = {
+            //$.widget("qq.comment", {
+
+            options: {
+
+                $content: $('#content'),
+                $loginTrigger: $('#onekey'), //一键登陆按钮
+                $logoutTrigger: $('#loginOut'), //mini导航 退出按钮
+                $popReply: $('#public_reply'), // 评论弹出框
+                $topReply: $('#top_reply'),
+                $top_textarea: $('#top_textarea'),
+                $allComments: $('#allComments'),
+                $showNum: $('#showNum'),
+                $commentTotleNum: $("#commentTotleNum"), // 全部评论数
+                $loadMore: $("#loadMore"), // loadmore 按钮
+                fetchUrl: '//coral.qq.com/', // 公共域名读
+                wfetchUrl: '//w.coral.qq.com/', // 公共域名写
+                pfetchUrl: '//coral.qq.com/', // 公共域名读
+
+                //发布评论的回调函数
+
+                topCallback: 'parent.topCallback',
+                popCallback: 'parent.popCallback',
+                reportCallback: 'parent.reportCallback',
+                deleteCallback: 'parent.deleteCallback',
+
+                $allComments: $('#tab1_allComments'), // 全部评论页卡
+                $myComments: $('#tab2_myComments'), //我的牛评页卡
+                $myTips: $('#tab3_tips'), // 提醒页卡
+                $myCons: $('#tab4_mycon'), // 我的评论
+                $loginFlag: $('#loginFlag'), //去掉
+                $loginBtn: $('#top_post_btn'),
+                $iframeHeight: '0',
+                $replylistId: '',
+
+                // 个人中心的变量
+
+                $myCowComment: $('#myCowComment'), // 我的牛评按钮
+                $myAllComment: $('#myAllComment'), // 个人中心 全部评论
+                $tabFlag: true,
+                $realtimeComments: 0,
+                $insertFlag: 'comment', // 标记回复评论位置
+                $nowDate: (new Date()),
+
+                $urlapi: {
+                    userId: 0,
+                    first: '',
+                    last: '',
+                    msgid: '',
+                    pageflag: 0
+                },
+                $urlapi_mycomment: {
+                    userId: 0,
+                    first: '',
+                    last: '',
+                    msgid: '',
+                    pageflag: 0
+                },
+
+                loginuin: 0,
+                pubSucEvent: 'comment' + 'pubsuccess', //发表评论成功时触发事件（用于在页面插入最新评论）,
+                topContentTips: '',
+                homePageSize: 10, // 主评论默认条数
+                centerPageSize: 10, // 个人中心默认条数
+                loadPageSize: 20, // 一次拉取条数
+                newsNum: 0, // 蓝条数字
+                hotNums: 10,
+                columSource: 1, // source 来源
+                columsubSource: 0, //
+
+                columCode: 1, //编码
+                columApi: 1, // 接口
+                columLink: 1,
+                columHot: 1,
+                commentNumbers: '', // 页面上所有需要评论数的地方
+                popupInfo: 'popClick',
+                popupLink: 'np-postlink',
+                reportBtn: 1,
+                centerFlag: 0, // 个人中心我的牛平拉取评论标志
+                changeFlag: 0,
+                reportId: '',
+                hotPageSize: 10, // 热评数
+                order: '', // 排序方式， '':时间,quality：热度  //20130911
+                upId: '',
+                siteName: '',
+                lastId: '',
+                huiyuan: 0,
+                film: 0,
+                client: 0,
+                dataImgObj:'[]',
+
+                cmt_array:'',
+                cmt_class:'',
+                cmt_content:'',
+
+                faceico:''
+
+            },
+            _create: function() {
+
+                var _this = this;
+                this.init(); // 个性化定义初始化 设置
+                this.changeTab();
+                this.bindSubmitEvent();
+                this.bindReportEvent(); //举报功能
+                this.bindDeleteEvent();
+                this.bindFooterEvent(this.options.$content);
+                this.bindOtherEvents();
+                this.loadCommentNum(); // 初始化评论数
+                this.hotList();
+                this.makeCommentList();
+                this.tabsComment();
+                this.clickLoadMore(); //个人中心的提醒 loadmore
+                this.sendStat(curSite);
+                this.initPostFrame(); // 评论上下文
+                this.loadNum();
+
+
+                this.upLoadImg(); //上传图片，初始化
+                if (!$('#iframe0').length) {
+                    $body.append('<iframe id="iframe0" name="iframe0" style="display:none"><script type="text/javascript">document.domain = "qq.com";</script></iframe>');
+                }
+                //绑定评论发表成功事件
+
+                // this.element.bind(this.options.pubSucEvent, function(event, data) {
+
+                //     //_this.insertTempComment(data.data.commentid, data.data.content, data.data.parent, data.data.time, data.data.checktype);
+                //     _this.insertTempComment(data);
+
+                //     _this.options.$urlapi_mycomment.msgid = _this.options.$urlapi_mycomment.first;
+
+                //     if (_this.options.columApi && $('#mycon').hasClass('np-active') && $('#myCowComment').hasClass('np-active')) {
+
+                //         _this.options.$urlapi_mycomment.pageflag = 0;
+
+                //         _this.loadMyComment();
+                //     }
+
+                //     _this.updateTime();
+
+                // });
+
+            },
+
+            insertTempCommentFn:function(event, data){
+                var _this = this;
+                //_this.insertTempComment(data.data.commentid, data.data.content, data.data.parent, data.data.time, data.data.checktype);
+                _this.insertTempComment(data);
+
+                _this.options.$urlapi_mycomment.msgid = _this.options.$urlapi_mycomment.first;
+
+                if (_this.options.columApi && $('#mycon').hasClass('np-active') && $('#myCowComment').hasClass('np-active')) {
+
+                    _this.options.$urlapi_mycomment.pageflag = 0;
+
+                    _this.loadMyComment();
+                }
+
+                _this.updateTime();
+            },
+
+            init: function() {
+
+                var o = this.options;
+
+                // 拉取json - 踩用
+
+                $.getScript('//mat1.gtimg.com/www/coral3.0/js/json.js',function(){
+
+                    o.cmt_array = cmtt_id.data.commentid;
+                    $.each(o.cmt_array,function(index,info){
+                        if(info.id == cmt_id){
+
+                            o.cmt_class = '';
+                            o.cmt_content = info.content;
+
+                            return false ;
+                        }else{
+
+                            o.cmt_class = 'np-tip-newpost1';
+                            //return;
+
+                        }
+
+                    })
+
+                });
+
+                $(parent.document).find('#commentIframe').css({
+                    '-webkit-transition': 'height 0.6s ease',
+                    'transition': 'height 0.6s ease'
+                });
+                if($(parent.document).find('#commentIframe')){
+                    var _this = this;
+                    setTimeout(function () {
+                        _this.iframeHeight();
+                    },600)
+
+                }
+                if($(parent.document).find('#commentIframe1')){
+                    $(parent.document).find('#commentIframe1').css({'-webkit-transition':'height 0.6s ease','transition':'height 0.6s ease'});
+
+                }
+                $('#mainBody').css('width', '100%');
+                o.commentNumbers = ($(parent.document).find('.commentNumbers')) ? ($(parent.document).find('.commentNumbers')) : '';
+                if (!$('#allComments .post-list').length) {
+                    $('#allComments').append("<ul class='post-list'></ul>");
+                }
+                $("a").each(function() {
+                    $(this).attr("hideFocus", "true");
+                })
+
+                /***
+
+                 页面可配置项
+
+                 ***/
+
+                if (parent.registerCoralEvent) {
+
+                    if (parent.registerCoralEvent.source) {
+                        o.columSource = parent.registerCoralEvent.source;
+                    }
+
+                    if (parent.registerCoralEvent.subsource) {
+                        o.columsubSource = parent.registerCoralEvent.subsource;
+                    }
+
+                    if (parent.registerCoralEvent.code == 0 || parent.registerCoralEvent.code == 1) {
+                        o.columCode = parent.registerCoralEvent.code;
+                    }
+                    if (parent.registerCoralEvent.ownStyle) {
+
+                        $('head').append('<link href="' + parent.registerCoralEvent.ownStyle + '" rel="stylesheet" type="text/css" media="screen"/>');
+                    }
+                    if (parent.registerCoralEvent.listHiden) {
+                        $('#content').hide();
+                        o.columApi = 0;
+                        //$(parent.document).find('#commentIframe').height(152);
+                    }
+                    if (parent.registerCoralEvent.commentNums) {
+                        o.homePageSize = parent.registerCoralEvent.commentNums;
+                    }
+                    if (parent.registerCoralEvent.commentLink == 0) {
+                        o.columLink = parent.registerCoralEvent.commentLink;
+                    }
+                    if (parent.registerCoralEvent.commentLink == 2) {
+                        o.columLink = parent.registerCoralEvent.commentLink;
+                    }
+                    if (parent.registerCoralEvent.commentHot == 0) {
+                        o.columHot = parent.registerCoralEvent.commentHot;
+                    }
+
+                    if (parent.registerCoralEvent.commentHotNums) {
+                        o.hotNums = parent.registerCoralEvent.commentHotNums;
+                    }
+
+
+                    if (parent.registerCoralEvent.popupInfo == 0) {
+                        o.popupInfo = 'popupInfoOff';
+                    }
+
+                    if (parent.registerCoralEvent.popupLink == 0) {
+                        o.popupLink = 'popupLinkOff';
+                    }
+
+                    if (parent.registerCoralEvent.reportBtn == 0) {
+                        o.reportBtn = 0;
+                    }
+
+                    if (parent.registerCoralEvent.site) {
+                        o.siteName = parent.registerCoralEvent.site;
+
+                        if (parent.registerCoralEvent.site == 'video') {
+
+                            o.huiyuan = 1;
+                        }
+                    }
+
+                    if (parent.registerCoralEvent.site1) {
+
+                        o.film = 1;
+
+                    }
+                    if (parent.registerCoralEvent.site2) {
+
+                        o.client = 1;
+
+                    }
+
+
+
+                    /** 区分不同频道 **/
+
+                    if (!(top.location.host.match('coral.qq.com'))) {
+                        if (parent.registerCoralEvent.site != undefined) {
+                            o.fetchUrl = '//' + parent.registerCoralEvent.site + '.coral.qq.com/';
+                        }
+                    } else {
+                        var str = top.location.host;
+                        if (str.match(/(\w+)\.coral\.qq\.com/) != null) {
+                            o.fetchUrl = '//' + str.match(/(\w+)\.coral\.qq\.com/)[1] + '.coral.qq.com/';
+                        }
+                    }
+
+                }
+            },
+
+
+
+            /**
+             * 创建评论li-dom结构
+             * @param info 数据
+             * @param control 区分是否被审核掉的评论
+             * @param top 区分哪块用creat
+             */
+
+            creatHtml: function(info, control, top) {
+
+
+                var _this = this;
+                var headImg = info.userinfo.head ? (info.userinfo.head) : defaultHeadPic; // 用户头像
+                var commentnum = info.userinfo ? info.userinfo.commentnum : '';
+                var upnum = info.userinfo.upnum;
+                var nick = info.userinfo.nick;
+                var content = info.content.replace(/\n/g, '<br />');
+                var area = info.userinfo.region.replace(/:/g, ' ');
+                var dis = !!control ? control : '';
+                var topIco = '';
+                var topFlag = '';
+                var topNo = ''
+                var topId = 'comment_';
+                var hotscale = '';
+                var deleteP = 'popClick';
+                var urlf = 'v_qq_com.comment';
+
+                // 新增轻表态 2015.02.10
+
+                var facecoment = '',facehide = 'np-tip-newpost1';
+
+                if(info.custom !== ''){
+
+                    facehide = '';
+                    if(info.custom == 1){
+                        facecoment = '赞';
+                    }else if(info.custom == 2){
+                        facecoment = '汗';
+                    }else if(info.custom == 3){
+                        facecoment = '怒';
+                    }else{
+                        facehide = 'np-tip-newpost1';
+                    }
+                }
+
+
+                if (this.options.film == 1) {
+                    urlf = 'film_direct.comment';
+                }
+                if (this.options.client == 1) {
+                    urlf = 'service.comment';
+                }
+
+                if (top == 'msg') {
+                    topId = ('msg_');
+                    topIco = ''
+                }
+                if (top == 'top') {
+                    topId = ('top_');
+                    topIco = 'topIco np-label-digest';
+                    topFlag = 'topAll';
+                }
+                if (info.rep == 0) {
+                    topNo = 'topno';
+                }
+                if (info.hotscale > 0) {
+                    hotscale = '';
+                } else {
+                    if (info.userinfo.userid != $.cookie('uid') && this.options.reportBtn) { // 去掉自己发评论的举报功能
+                        hotscale = "<a href='javascript:void(0)' class='np-btn np-btn-report report' id='report_" + topId + info.id + "'>举报</a>";
+                    }
+                    topIco = '';
+                }
+                var hide = '';
+                var popClick = this.options.popupInfo;
+                if (info.replyuserid == 10001) {
+                    deleteP = '';
+                }
+
+                var HTML = '';
+                var rep = '';
+                var moreLink = ''
+
+                if(info.rep || info.repnum){
+                    moreLink = this.creatPostLink(info);
+                }
+
+                if (info.rep && top != 'top') {
+                    rep = '(<em>' + info.rep + '</em>)';
+                }
+                //内容=='',子回复==0 ，删除==0（否），图片==没有
+                if (info.content == '' && info.rep == 0 && info.isdeleted == 0 && info.picture == undefined) {
+                    return;
+                }
+
+                // 增加好莱坞VIP
+
+                var vip1 = '';
+                var vip2 = '';
+                var vip3 = '';
+                var vip4 = '';
+                var vip5 = '';
+                if (this.options.huiyuan == 1) { // 是否是视频站
+                    if (info.userinfo.hwvip == 1) {
+                        vip1 = 'hyy';
+                        vip2 = 'huiyuan p' + info.userinfo.hwlevel;
+
+                    }
+                    if (info.replyhwvip == 1) {
+                        vip5 = 'hyy';
+                        vip4 = 'huiyuan p' + info.replyhwlevel;
+                    }
+                    if (this.options.client == 1 || info.classNone == 'none') {
+
+                        vip3 = 'vhidden';
+                    }
+                }
+                if (info.isdeleted == 1) { // 被删除帖子
+
+                    HTML += '<li class="np-post" id="' + topId + info.id + '">';
+                    HTML += '<img class="np-avatar" src="' + headImg + '"alt="头像"/>';
+                    HTML += '<div class="np-post-body">';
+                    HTML += '<div class="np-post-header">';
+                    HTML += '<a href="javascript:void(0)" class="np-user">' + nick + '</a>';
+                    HTML += ((info.parent == 0) ? ' ' : '<a href="javascript:void(0)" post_uid = "' + info.replyuserid + '" class="replywho np-icon-reply-weak np-user ' + deleteP + '" style="display:' + info.classNone + '">' + info.replyuser + '</a>');
+                    HTML += '<span class="np-time" data="' + info.time + '" >' + this.formatTime(info.time) + '</span>'
+                    HTML += '</div>';
+                    HTML += '<div class="np-post-content padding-b"><p>此贴已被用户删除</p></div>';
+                    HTML += '</div>';
+                    HTML += '<ul class="children"></ul>';
+                    HTML += '</li>';
+
+                } else if (info.checkstatus == 2 && (info.rep != 0)) {
+                    HTML += "<li class='postHide' id=" + topId + info.id + "><ul class='children'></ul></li>";
+                } else {
+
+                    //201404171100 新加图片显示
+                    var imgHtml = '';
+                    var imgWH = '';
+                    var dataPic = '['
+                    //[{"url":"http://113.108.77.71/coral/Q3auHgzwzM5DwiaRz39rmFgUDcAgvUq4fP08viaibibu9icrUHZuuSGicxFg","width":915,"height":610}]
+                    if (info.picture != undefined && info.picture.length) {
+
+                        imgHtml +=  '<div><ul class="list_w100" id="pic_'+ info.id +'" >';
+                        for(var j=0,len = info.picture.length; j<len;j++){
+                            //dataPic +='{"url":'+  info.picture[ j ].width
+
+                            if(info.picture[ j ].width>info.picture[ j ].height){
+                                imgWH = 'height=100';
+                            }else{
+                                imgWH = 'width=100'
+                            }
+                            imgHtml += '<li class="list_item"><a href="javascript:void(0)" class="figure">'
+                                +'<img data-order="'+ j +'" data-total="'+ len +'" data-width="'+ info.picture[ j ].width +'" data-height="'+ info.picture[ j ].height +'" '+ imgWH +' class="np-con-img" src="' + info.picture[ j ].url + '/100" /></a></li>'
+                        }
+                        imgHtml += '</ul></div>'
+                    }
+
+                    HTML += '<li class="np-post ' + dis + ' ' + topIco + ' ' + topFlag + ' ' + topNo + ' ' + hide + '" id="' + topId + info.id + '">'
+                        + '<div class="np-tip-newpost"></div>'
+                        + '<img class="np-avatar ' + popClick + '" post_uid ="' + info.userinfo.userid + '" src="' + headImg + '"alt="头像"  onerror="errorImg(this)">'
+                        +'<div class="np-attitude '+facehide+'">'+facecoment+'</div>'
+                        + '<div class="np-post-body">'
+                        + '<div class="np-post-header">' + hotscale + '<span class="' + vip1 + '"><a href="javascript:void(0)" title="' + nick + '" class="np-user ' + popClick + ' " post_uid = "' + info.userinfo.userid + '">' + nick + '</a><a href="http://film.qq.com/vip.html?ptag=' + urlf + '" target = "_blank" class="' + vip2 + '" title="会员尊享红名特权"></a></span>'
+
+
+                        + ((info.parent == 0) ? '<a href="javascript:void(0)" class="replywho np-icon-reply-weak np-user" style="display:none">' + info.replyuser + '</a>' : '<span class="' + vip5 + ' ' + vip3 + '"><a href="javascript:void(0)" title="' + info.replyuser + '" post_uid = "' + info.replyuserid + '" class="replywho np-icon-reply-weak np-user ' + deleteP + ' " style="display:' + info.classNone + '">' + info.replyuser + '</a><a href="http://film.qq.com/vip.html?ptag=' + urlf + '" target = "_blank" class="' + vip4 + '"></a></span>')
+
+
+                        + '<span class="np-time" data="' + info.time + '" >' + this.formatTime(info.time) + '</span>' + '</div>'
+                        + '<div class="np-post-content">' + '<p>' + info.content.replace(/\n/g, '<br />')
+                        + '</p>'
+                        + '</div>'
+                        + imgHtml
+                        + '<div class="np-post-footer">'
+                        + '<a href="javascript:void(0)" class="np-btn np-btn-upvote upvote" id=upvote_' + info.id + '>(<em>' + info.up + '</em>)</a>'
+
+                        + '<a href="javascript:void(0)" class="np-btn np-btn-cvote cpvote '+_this.options.cmt_class+'" id=cpvote_' + info.id + '>'+_this.options.cmt_content+'(<em>' + info.poke + '</em>)</a>'
+
+                        + '<a href="javascript:void(0)" class="np-btn np-btn-reply reply">回复' + rep + '</a>'
+                        + ((topNo != 'topno' && topFlag == 'topAll') ? moreLink : '')
+                        + '<a href="javascript:void(0)" class="np-btn np-btn-newreply"></a>' + '</div>' + '</div>' + '<ul class="children"></ul>' + '</li>';
+
+                }
+                return HTML
+            },
+
+
+            // 单独拉评论数方法 -- 2013.9.6
+
+            loadCommentNum: function() {
+
+                var _this = this;
+                var o = this.options;
+                var numurl = o.fetchUrl + 'article/' + cmt_id + '/commentnum';
+                $.ajax({
+                    url: numurl,
+                    dataType: 'jsonp',
+                    jsonpCallback: 'myHotcommentNum',
+                    beforeSend: function() {
+                        _this._hotTimer0 = new Date().getTime(); //Qoss时间戳
+                    },
+                    success: function(data) {
+                        if (data.errCode == 0) {
+                            o.commentNumbers.html(data.data.commentnum);
+                            o.$commentTotleNum.html('<span>' + data.data.commentnum + '条评论</span>');
+                        }
+                    }
+                });
+
+
+            },
+
+            makeCommentList: function() { // 首页评论渲染 --后面需要修改
+
+                var _this = this;
+                var o = this.options;
+
+                if (o.columLink == 1) {
+                    o.$commentTotleNum.attr('href', 'http://coral.qq.com/' + cmt_id);
+
+                } else {
+                    o.$commentTotleNum.attr('href', 'javascript:void(0)');
+                    o.$commentTotleNum.removeAttr('target');
+                    o.$commentTotleNum.css('cursor', 'default');
+                    o.$commentTotleNum.css('text-decoration', 'none');
+
+                }
+
+                if (o.columLink == 2) {
+
+                    $('#globalNav h1').hide();
+                    $('#globalNav').css('border-bottom', 'none');
+
+                }
+                if ($(parent.document.getElementById('cmtNum'))) {
+                    $(parent.document.getElementById('cmtNum')).attr({
+                        href: 'http://coral.qq.com/' + cmt_id,
+                        target: '_blank'
+                    });
+                }
+
+                if (o.columApi) {
+                    _this.loadMore();
+                }
+
+                o.$loadMore.find('span').unbind().bind('click', function() {
+
+                    $('#loadMore>span').hide();
+                    $('#loadMore>em').addClass('np-load-more-loading').show();
+                    //var lastId = $('#allComments li:last').attr('id').split('_')[1];
+                    _this.loadMore(o.lastId);
+                    if (o.$loadMore.data('loadMoreNume') - o.homePageSize <= 0) {
+                        o.$loadMore.hide();
+                        o.$loadMore.data('loadMoreNume', 0);
+                    } else {
+                        o.$loadMore.data('loadMoreNume', o.$loadMore.data('loadMoreNume') - o.homePageSize);
+                    }
+                    sendClientStat(curSite, 1, cmt_id, 'clk_allcomment_more');
+                })
+            }, //  makeCommentList方法结束
+
+
+            hotList: function() { // 置顶评论渲染
+
+                var _this = this;
+                var o = this.options;
+                var moreUrl = o.fetchUrl + 'article/' + cmt_id + '/hotcomment?reqnum=' + o.hotNums;
+
+                if (o.columHot) {
+                    $.ajax({
+
+                        url: moreUrl,
+                        dataType: 'jsonp',
+                        jsonpCallback: 'myHotcommentList',
+                        beforeSend: function() {
+                            _this._hotTimer0 = new Date().getTime(); //Qoss时间戳
+                        },
+                        success: function(data) {
+
+                            if (data.errCode == 0) {
+
+
+                                var _hotTimer1 = new Date().getTime(); //Qoss时间戳
+
+                                if (data.data.commentid.length != 0) {
+
+                                    var num = (data.data.commentid.length);
+
+                                    $.each(data.data.commentid, function(index, info) {
+
+                                        $('#allComments .post-list').prepend(_this.creatHtml(data.data.commentid[num - index - 1], 0, 'top'));
+
+                                    });
+
+                                    $.each($('#allComments li.topAll'), function(index, info) {
+
+                                        if (index == (num - 1)) {
+                                            $(this).addClass('noborder');
+                                            $(this).after('<li class="np-title-new">最新评论</li>');
+                                        }
+
+                                    });
+
+                                    $('#allComments .post-list').prepend('<li class="np-title-hot">热门评论</li>');
+                                    _this.conHeight(5);
+                                    setTimeout(function() {
+                                        _this.iframeHeight()
+                                    }, 600)
+
+                                }
+                                //zenli 插入话题入口
+                                //拉取话题的帖子列表
+                                //"3juplgd39"
+                                var topicId = data.data.targetinfo.topicids.split(",")[0] ;
+                                if(topicId){
+
+                                    var url = '//topics.qq.com/post/list';
+                                    var data = {};
+                                    data.listType =  'time';
+                                    data.topicId = topicId;
+                                    data.reqNum =  1;
+                                    data.source = 3;
+                                    data.platform =  1;
+
+                                    $.ajax({
+                                        url: url,
+                                        dataType: 'jsonp',
+                                        jsonpCallback: 'topic_get_comment_list_callback',
+                                        data: data,
+                                        cache: false,
+                                        success: function(data) {
+
+                                            if(data.errCode == '0' && data.data.topicList && data.data.topicList[topicId]){
+
+                                                var topic_list_url = '//topics.qq.com/topic/' + topicId;//跳转的话题list地址
+                                                var topic_name = data.data.topicList[topicId].name;
+                                                var html = '<li class="topic-comment np-post"  ><a  href='+topic_list_url+' target="_blank">';
+                                                html += '<div class="comment-header" ><span class="header-xg" >相关话题</span><span class="header-name" >#'+ topic_name +'#</span></div>';
+
+                                                if(data.data.postList[0]){
+                                                    var p = data.data.postList[0];
+                                                    var nick = data.data.userList[p.userId].nick;
+
+                                                    html+='<div class="comment-title" ><h3>'+ p.title +'</h3></div>'
+                                                        + '<div class="comment-content" >' + p.abstract + '</div>'
+                                                        + '<div class="comment-footer"><span >发帖人：</span><span class="nick"  >' + nick + ' </span></div>'
+
+
+                                                }else if(data.data.topicList[topicId]){
+                                                    //无帖子时的默认
+                                                    html += '<div class="comment-content" >' + data.data.topicList[topicId].abstract + '<span style="color:#379BE9" >马上参与讨论》<span></div>'
+                                                }
+                                                html += '</a></li>';
+                                                var lists = $('#allComments .np-post');
+                                                var topLists = $('#allComments .topAll');
+                                                //插在第二条后面，或者插在最后面
+                                                if(lists.length>2){
+                                                    if(topLists.length == 1){
+                                                        //热评就1个的时候，放在热评后面。
+                                                        $(topLists[0]).after(html);
+                                                    }else{
+                                                        $(lists[1]).after(html);
+                                                    }
+
+                                                }else{
+                                                    $('#allComments .np-comment-list').append(html);
+                                                }
+                                                if(!$("#editor_topic_enter").size()){
+                                                    //评论框内插入话题入口
+                                                    $("#loginFlag").after('<a id="editor_topic_enter" style="color: #faa32f;text-decoration: none;" href="'+topic_list_url+'" target="_blank" ><span style="    color:#faa32f;line-height: 42px;padding-left: 6px;" >话题#'+topic_name+'#热议中</span></a>');
+                                                }
+
+                                            }
+
+                                        },
+                                        error: function(xhr, status, err) {
+                                        }
+
+                                    });
+
+                                }
+
+
+
+                            } else {
+                                //emptyListOrForbiddenL();
+                            }
+
+                            Qoss('zrpl', _this._hotTimer0, {
+                                1: (_this._hotTimer0 + 1),
+                                2: _hotTimer1,
+                                3: _hotTimer1
+                            }, 100);
+
+                        }
+
+                    });
+
+
+                }
+
+
+            },
+
+
+            tabsComment: function() { // 页卡公用方法
+
+                var _this = this;
+                var o = this.options;
+
+                $('#mycon').unbind().click(function() {
+
+                    $(this).addClass('np-active');
+                    $('#mytips').removeClass('np-active');
+
+                    o.$myTips.hide();
+                    o.$myCons.show();
+
+                    if ($('#my-notification-list li').length == 0) {
+                        setTimeout(function() {
+                            _this.loadMyComment()
+                        }, 500);
+                        $('#myuserInfo').hide();
+                    }
+                    sendClientStat(curSite, 1, cmt_id, 'clk_mycomment');
+                    _this.iframeHeight();
+                });
+
+                $('#mytips').unbind().click(function() {
+                    $(this).addClass('np-active');
+                    $('#mycon').removeClass('np-active');
+                    o.$myTips.show();
+                    o.$myCons.hide();
+
+                    if ($('#my-message-list li').length == 0) {
+                        _this.loadMyMessage();
+                    }
+                    sendClientStat(curSite, 1, cmt_id, 'clk_notice');
+                    _this.iframeHeight();
+                });
+
+                //20130903排序方式
+                //排序方式初始化事件
+
+
+                if (o.order != '') {
+
+                    $('#order a').removeClass('np-active');
+                    $('#order a[data-sort=' + o.order + ']').addClass('np-active');
+                }
+
+                $('#order a').unbind().click(function() {
+
+
+                    if ($(this).attr('data-sort') == 'time') {
+                        sendClientStat(curSite, 1, cmt_id, 'clk_order_time');
+                    } else {
+                        sendClientStat(curSite, 1, cmt_id, 'clk_order_hot');
+                    }
+
+                    if ($(this).hasClass('np-active')) {
+                        return
+                    } //如果已经选中，直接返回
+
+                    $('#order a').removeClass('np-active');
+
+                    $(this).addClass('np-active');
+
+                    $('#allComments .tipInfo').addClass('waitting').html('').show(); // 初始化loadding状态
+
+                    o.order = $(this).attr('data-sort') != 'time' ? $(this).attr('data-sort') : '';
+
+                    $('#allComments .post-list').html(''); // 清空数据
+                    $('#allComments .waitting').show(); // 显示加载中
+
+                    o.$loadMore.hide();
+
+                    // 隐藏‘加载更多’
+                    if (o.order != 'quality') {
+
+                        setTimeout(function(){ // 解决ie6不加载问题
+                            _this.hotList();
+                        },200)
+
+                    }
+                    setTimeout(function() {
+                        _this.loadMore(0, 1)
+                    }, 500); // 拉取数据
+                })
+            },
+
+
+            loadMore: function(lastID, order) {
+
+                var _this = this;
+                var o = this.options;
+                lastID = lastID || 0;
+                var pageNum = o.homePageSize;
+                if (lastID) {
+                    pageNum = 20;
+                }
+                var moreUrl = o.fetchUrl + 'article/' + cmt_id + '/comment?commentid=' + lastID + '&reqnum=' + pageNum + '&tag=' + o.order;
+
+                function emptyListOrForbiddenL() {
+
+                    if ($('#allComments li').length == 0) {
+                        $('#allComments').children('.tipInfo').removeClass('waitting').html('暂无评论').show();
+                    }
+                    if (!$('#allComments .post-list').length) {
+                        $('#allComments').append("<ul class='post-list'></ul>");
+                    };
+
+                }
+                $.ajax({
+
+                    url: moreUrl,
+                    dataType: 'jsonp',
+                    beforeSend: function() {
+                        _this._latestTimer0 = new Date().getTime(); //Qoss时间戳
+                    },
+                    error: emptyListOrForbiddenL,
+                    jsonpCallback: 'mainComment',
+                    success: function(data) {
+
+                        if (data.errCode == 0) {
+                            o.lastId = data.data.last;
+                            var _latestTimer1 = new Date().getTime(); //Qoss时间戳
+
+
+                            if ((data.data.retnum < data.data.reqnum || data.data.total <= o.homePageSize)) {
+
+                                $('#loadMore>span').hide();
+                                $('#loadMore>em').removeClass('np-load-more-loading').show();
+
+                            } else {
+
+                                $('#loadMore>span').show();
+                                $('#loadMore>em').hide();
+
+                            }
+
+
+                            o.$showNum.data('maxID', data.data.maxid); // 记录最大ID 用于更新新评论标记
+
+                            show1(data);
+
+                            _this.iframeHeight();
+
+                            if (!lastID) { // 如果是初始化首页列表
+
+                                if (data.data.reqnum < data.data.total && $('#allComments li').length > 0) {
+                                    o.$loadMore.show();
+                                }
+
+                                //_this.probeEvent(); // 启动探测接口
+
+                                o.$commentTotleNum.html('<span>' + data.data.total +'条评论</span>');
+                                o.commentNumbers.html(data.data.total);
+
+
+                                if ($(parent.document.getElementById('cmtNum'))) {
+                                    $(parent.document.getElementById('cmtNum')).html(data.data.total);
+                                }
+                                if ($(parent.document.getElementById('cmtNum2'))) {
+                                    $(parent.document.getElementById('cmtNum2')).html(data.data.total);
+                                }
+                            }
+
+                        } else {
+                            emptyListOrForbiddenL();
+                        }
+
+                        //20130917暂无评论不显示“更多”按钮
+                        if ($('#allComments li').length == 0) {
+                            o.$loadMore.hide();
+                        }
+
+                        Qoss('zxpl', _this._latestTimer0, {
+                            1: (_this._latestTimer0 + 1),
+                            2: _latestTimer1,
+                            3: _latestTimer1
+                        }, 100);
+
+
+                    }
+                });
+                var show1 = function(commentList) {
+
+                    if (!commentList.data.commentid.length && $('#allComments li').length == 0) {
+                        if (o.order != '' && order != 1) {
+                            $('#order span[data-sort=time]').trigger('click');
+                        }
+                        if (o.order == 'quality') {
+                            $('#allComments').children('.tipInfo').removeClass('waitting').html('暂无热评').show();
+                        } else {
+                            $('#allComments').children('.tipInfo').removeClass('waitting').html('暂无评论').show();
+                        }
+                        o.$loadMore.hide();
+                    } else {
+                        $('#allComments').children('.tipInfo').hide();
+                    }
+
+                    if (!$('#allComments .post-list').length) {
+                        $('#allComments').append("<ul class='post-list'></ul>");
+                    }
+                    $.each(commentList.data.commentid, function(index, info) {
+
+                        if (info.parent == 0 || $('#comment_' + info.parent).length == 0) {
+
+                            if ($('#comment_' + info.parent).length == 0 && info.parent != 0) {
+
+                                info.classNone = 'none';
+
+                            } else {
+                                info.classNone = '';
+
+                            }
+                            $('#allComments .post-list').append(_this.creatHtml(info));
+
+                        } else {
+
+                            if ($('#comment_' + info.parent).hasClass('postHide')) {
+
+                                info.classNone = 'none';
+                            } else {
+                                info.classNone = '';
+
+                            }
+                            $('#comment_' + info.parent + '>ul.children').append(_this.creatHtml(info));
+
+                        }
+                    });
+                    $('#allComments .post-list .postHide').find('.replywho:first').hide();
+                    setTimeout(function() {
+                        _this.conHeight()
+                    }, 300);
+                    setTimeout(function() {
+                        _this.iframeHeight()
+                    }, 500);
+                    //_this.conHeight();
+
+                }
+            },
+            blueLine: function(targetId) {
+
+                setTimeout(function() {
+                    $(targetId + '>.np-tip-newpost').animate({
+                        opacity: '0'
+                    }, 10000);
+                    setTimeout(function() {
+
+                        $(targetId + '>.np-avatar').animate({
+                            'left': '0px'
+                        }, 400);
+                        $(targetId + '>.np-post-body').animate({
+                            'padding-left': '10px'
+                        }, 400);
+                        $(targetId).removeClass('blueflag');
+
+                    }, 8000)
+                }, 5000);
+
+
+            },
+
+
+
+
+            // 探测接口 有无文章新评论实时拉取更新
+
+
+            probeEvent: function() {
+
+                var _this = this;
+                var o = this.options;
+
+                var realTime = function() {
+                    if (o.$tabFlag) { // 当前活跃窗口
+                        $.ajax({
+                            url: '//sync.coral.qq.com/t/' + cmt_id,
+                            dataType: 'jsonp',
+                            jsonpCallback: 'propNum',
+                            success: function(data) {
+                                if (data > o.$realtimeComments && data != 0) {
+                                    o.$realtimeComments = data;
+
+                                    _this.loadNew();
+                                }
+                                setTimeout(function() {
+                                    realTime()
+                                }, 30000);
+                            },
+                            error: function() {
+                                setTimeout(function() {
+                                    realTime()
+                                }, 30000);
+                            }
+                        });
+                        //if(_this.getLoginStatus() != 0){   // 如果用户存在
+                        //_this.loadNum();  //  拉取个人评论数小气泡
+                        //}
+                    } else {
+                        setTimeout(function() {
+                            realTime()
+                        }, 30000);
+                    }
+                    _this.updateTime();
+                }
+                realTime(); // 第一次执行探测
+            },
+
+
+            loadNum: function() {
+
+                var _this = this;
+                var o = this.options;
+                var id = $.cookie('uid');
+
+                var url = '//sync.coral.qq.com/u/' + id + '?platform=' + o.siteName;
+                if (!/^\d+$/.test(id + '')) {
+                    return;
+                }
+
+                var realNums = function() {
+
+                    if (o.$tabFlag && $.cookie('uin') && parseInt(id) > 10000) { // 当前活跃窗口
+
+                        $.ajax({
+                            url: url,
+                            dataType: 'jsonp',
+                            jsonpCallback: 'userNum',
+                            success: function(data) {
+
+                                if (data > 0) {
+                                    $('#popMsg').html(data).show();
+
+                                } else {
+                                    $('#popMsg').html('').hide();
+                                }
+                                setTimeout(function() {
+                                    realNums()
+                                }, 30000);
+                            },
+                            error: function() {
+                                setTimeout(function() {
+                                    realNums()
+                                }, 30000);
+                            }
+                        });
+                    } else {
+                        setTimeout(function() {
+                            realNums()
+                        }, 30000);
+                    }
+                }
+                realNums();
+            },
+
+
+
+            loadNew: function() {
+                var _this = this;
+                var o = this.options;
+                var num = 0;
+
+
+                $.ajax({
+                    url: o.pfetchUrl + 'article/' + cmt_id + '/sync?lastid=' + o.$showNum.data('maxID'),
+                    dataType: 'jsonp',
+
+                    jsonpCallback: 'newComment',
+
+                    timeout: 30000, // ajax请求超时时间 30秒
+
+                    success: function(data) { //从服务器得到数据，显示数据并继续查询
+
+                        _this.options.$nowDate = data.info.time * 1000;
+
+                        if (data.errCode == 0 && data.data.length != 0) {
+
+                            if (data.data.maxid) { // 记录最新id
+
+                                o.$showNum.data('maxID', data.data.maxid); // 更新 最新ID
+
+                            }
+
+                            $.each(data.data.commentid, function(index, info) {
+
+
+                                if ($('#comment_' + info.id).length == 0) {
+
+                                    if (info.checkstatus != 2) {
+
+                                        var a = o.$commentTotleNum.children('span').html();
+
+                                        o.$commentTotleNum.children('span').html(parseInt(a) + 1);
+
+                                        o.commentNumbers.html(parseInt(a) + 1);
+
+
+                                    }
+
+
+                                    if (info.parent == 0) { // 如果是主评论,则先放进中转站
+
+                                        if (info.userinfo.userid != $.cookie('uid')) {
+
+                                            $("#hiddenCon").prepend(_this.creatHtml(info)); // 包括自己的评论
+
+                                            var li = $("#hiddenCon li");
+
+                                            $.each(li, function(index, li) {
+                                                $(li).addClass('blueflag');
+                                            });
+                                        }
+
+                                    } else { // 不是主评论 是回复提示气泡
+
+                                        $.each(o.$allComments.find('li'), function(index, data) {
+
+                                            if (info.userinfo.userid != $.cookie('uid')) { // 判断是否是当前用户自己发的回复,如果是则没有气泡提醒
+
+                                                if ('comment_' + info.parent == data.id) { // 判断新增的id是否 和当前的一致
+
+                                                    if ($('#' + data.id).data('num') == undefined) {
+
+                                                        $('#' + data.id).data('num', 0);
+
+                                                    }
+
+                                                    if ($('#comment_' + info.parent).hasClass('undis')) {
+
+                                                        var numElement = $('#comment_' + info.parent).parents('li:not(.undis):first');
+
+                                                        numElement.data('num', Number(numElement.data('num')) + 1);
+
+                                                        var tips = numElement.data('num') + '条新回复';
+
+                                                        var moreBtn = numElement.find('.post-footer:first>em.newcoment');
+
+                                                        moreBtn.html(tips);
+
+                                                        moreBtn.show();
+
+                                                        //$(data).find('ul:first').prepend(_this.creatHtml(info,'undis'));
+
+                                                    } else {
+
+                                                        $('#' + data.id).data('num', Number($('#' + data.id).data('num')) + 1);
+                                                        var tips = $('#' + data.id).data('num') + '条新回复';
+
+                                                        var moreBtn = $(this).find('.post-footer:first>em.newcoment');
+
+                                                        moreBtn.html(tips);
+                                                        moreBtn.show();
+
+                                                    }
+
+                                                    $(data).find('ul:first').prepend(_this.creatHtml(info, 'undis'));
+
+                                                }
+
+                                            }
+                                        });
+
+                                    }
+
+
+
+
+                                    if ($("#hiddenCon").html() && info.parent) {
+                                        var newLi = $("#hiddenCon li"); //新获取的评论列表
+                                        var strChildHtml = "";
+
+                                        $.each(newLi, function(index, childInfo) {
+
+                                            if (('comment_' + info.parent) == childInfo.id) {
+                                                $(childInfo).children('.children').append(_this.creatHtml(info));
+                                            }
+                                        });
+                                    };
+
+                                }
+                            }); // each 结束
+
+                            var blueLi = $("#hiddenCon li").not($('.hide')).length;
+
+                            if (blueLi) {
+
+                                $("#showNum span").html('<em>' + blueLi + '</em> 条新评论');
+
+                                $("#showNum").show().animate({
+                                    height: '30px'
+                                }, 'slow', function() {
+                                    _this.iframeHeight()
+                                });
+
+
+                            }
+
+                            $("#showNum").unbind().bind("click", function() {
+
+
+                                $("#allComments ul:first").prepend($("#hiddenCon").html());
+
+                                $('#hiddenCon .blueflag').each(function(index, element) {
+                                    var id = $(this).attr('id')
+                                    _this.blueLine('#' + id);
+                                });
+
+
+                                $("#allComments li.temporary").remove();
+                                $("#hiddenCon").html('');
+
+                                $(this).hide();
+
+                                $('#allComments .tipInfo').hide();
+
+                                _this.iframeHeight();
+
+                                o.newsNum = 0;
+
+                                sendClientStat(curSite, 1, cmt_id, 'clk_newcomment_notice');
+
+                            });
+
+                        } else {
+                            return;
+                        }
+                        _this.updateTime();
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) {
+
+                        if (textStatus == "timeout") {
+                            setTimeout(function() {
+                                loadNewHtml()
+                            }, 5000); // 如果数据请求成功 隔2 秒 发起请求
+                        }
+                    }
+                });
+
+
+
+
+            },
+
+            /**  切换页卡 **/
+
+            changeTab: function() {
+
+                var o = this.options;
+                var _this = this;
+                $(document).bind({
+                    'show.visibility': function() { // 当前活跃
+                        o.$tabFlag = true;
+                    },
+
+                    'hide.visibility': function() { // 失去当前状态
+                        o.$tabFlag = false;
+                    }
+                });
+            },
+
+            bindFooterEvent: function(container) { // 参数为评论列表容器
+
+                var _this = this;
+                var o = this.options;
+                var publicContent = $('.pop_reply'); //获取公共评论框
+                var publicSubmit = $('.pop_reply a.submit');
+                var publicText = $('.pop_reply textarea');
+
+
+                container.delegate('.reply', 'click', function(ev) { // 绑定弹框事件
+
+                    var event = ev || window.event;
+                    var commentsId = $(this).parents('li.np-post').attr('id'); // comment_32424344
+                    publicSubmit.attr('id', ('pop_' + commentsId)); // pop_comment_32424344
+                    publicText.attr('id', ('pop_text_' + commentsId)); // pop_text_comment_32424344
+                    var childwrap = $(this).closest('.np-post-body').next('.children'); // 获取空层 .children
+                    childwrap.find('.np-reply-box-footer a').removeClass('submitOn').addClass('submit').html('回复');
+                    childwrap.find('textarea').val('');
+                    event.stopPropagation(); // 阻止冒泡
+                    if (childwrap.has('.pop_reply').length && (childwrap.children().first().attr('id')) == 'public_reply') {
+
+                        if (childwrap.children('.pop_reply').is(':visible')) {
+                            childwrap.children('.pop_reply').find('.commtSub').hide();
+                            childwrap.children('.pop_reply').slideUp('10', function() {
+
+                                _this.iframeHeight();
+
+                            });
+
+                        } else {
+
+                            childwrap.children('.pop_reply').find('.commtSub').show();
+                            childwrap.children('.pop_reply').slideDown('100', function() {
+
+                                _this.iframeHeight()
+
+                            });
+                            setTimeout(function() {
+                                childwrap.children('.pop_reply').find('textarea').focus()
+                            }, 200);
+                        }
+                    } else {
+
+                        container.find('.pop_reply').slideUp('10', function() {
+
+                            $(this).remove();
+                            _this.iframeHeight();
+
+                        });
+
+                        childwrap.prepend(publicContent.clone());
+
+                        childwrap.children('.pop_reply').slideDown('100', function() {
+                            // childwrap.children('.pop_reply').find('.commtSub').show().animate({
+                            //     height: '48px'
+                            // }, 'fast');
+                            _this.iframeHeight()
+
+                        });
+                        setTimeout(function() {
+                            childwrap.children('.pop_reply').find('textarea').focus()
+                        }, 200);
+
+
+                    }
+                    //绑定上传图片事件
+                    $('.children .add_file').on('change',function(){
+
+                        _this.upLoadchange($(this))
+                    })
+
+                    _this.iframeHeight();
+                });
+
+
+                container.delegate('.pop_reply', 'click', function(event) {
+                    // 上传图片有点击事件 阴止冒泡不能触发 by 20140819 link
+                    //event.stopPropagation(); // 阻止冒泡
+
+                });
+
+
+                container.delegate('.submit', 'click', function() { // 绑定submit提交按钮事件
+
+                    var _status = _this.getLoginStatus(); //先获取用户状态
+
+                    var tid = $(this).closest('[tid]').attr('tid');
+
+                    o.replylistId = $(this).attr('id').split('_')[2];
+
+                    if (_status != 0) { // 如果用户存在
+
+
+                        _this.checkAndPublish(this.id, tid);
+
+                        o.$insertFlag = this.id.split('_')[1]; // 标记发表回复的位置 comment/我的主评 msg/提醒 post/我的评论
+
+                        sendClientStat(curSite, 1, cmt_id, 'pub_reply');
+
+                    } else { //未登陆
+
+                        _this.showLoginLayer();
+
+                    }
+
+                });
+
+                container.delegate('.pop_user_login', 'click', function() {
+                    _this.showLoginLayer();
+
+                });
+
+                $('#my-notification').delegate('.upvote', 'click', function() {
+                    alert('自己不能顶自己');
+                    return false;
+
+                });
+
+                container.delegate('.upvote', 'click', function() { //绑定顶事件
+
+                    var textid = $(this).attr('id');
+                    var commentid = textid.split('_')[1];
+                    o.uptId = textid;
+
+                    if ($(this).hasClass('np-btn-active')) {
+                        return false;
+                    }
+
+                    if ($.cookie('uid') == $(this).parent().parent().find(".np-user").attr('post_uid')) {
+
+                        alert('自己不能顶自己');
+                        return false;
+                    }
+
+                    //个人中心中targetid可能是其它文章的targetid
+                    var tgtID = cmt_id;
+                    if ($(this).closest('[tid]').length) {
+                        tgtID = $(this).closest('[tid]').attr('tid');
+                    }
+                    var url = o.wfetchUrl + 'article/comment/up/to/' + commentid + '?targetid=' + tgtID;
+
+                    $.ajax({
+                        url: url,
+                        dataType: 'jsonp',
+                        jsonpCallback: 'ding',
+                        cache: true,
+                        success: function(data) { //设置一个空回调防止屏蔽返回数据。
+
+                            sendClientStat(curSite, 1, cmt_id, 'pub_up');
+                        }
+                    });
+
+                    var emNum = $(this).find('em');
+                    var eNum = parseInt(emNum.text());
+
+                    emNum.html(eNum + 1);
+                    $(this).addClass('np-btn-active');
+
+                });
+
+
+                container.delegate('.cpvote', 'click', function() { //绑定踩
+
+                    var textid = $(this).attr('id');
+                    var commentid = textid.split('_')[1];
+                    o.uptId = textid;
+
+                    if ($(this).hasClass('np-btn-active')) {
+                        return false;
+                    }
+
+                    if ($.cookie('uid') == $(this).parent().parent().find(".np-user").attr('post_uid')) {
+
+                        alert('自己不能踩自己');
+                        return false;
+                    }
+
+                    //个人中心中targetid可能是其它文章的targetid
+                    var tgtID = cmt_id;
+                    if ($(this).closest('[tid]').length) {
+                        tgtID = $(this).closest('[tid]').attr('tid');
+                    }
+                    var url = o.wfetchUrl + 'article/comment/up/to/' + commentid + '?targetid=' + tgtID + '&uptype=1';
+
+                    $.ajax({
+                        url: url,
+                        dataType: 'jsonp',
+                        jsonpCallback: 'cai',
+                        cache: true,
+                        success: function(data) { //设置一个空回调防止屏蔽返回数据。
+
+                            sendClientStat(curSite, 1, cmt_id, 'pub_up');
+                        }
+                    });
+
+                    var emNum = $(this).find('em');
+                    var eNum = parseInt(emNum.text());
+
+                    emNum.html(eNum + 1);
+                    $(this).addClass('np-btn-cactive');
+
+                });
+
+
+                container.delegate('.popClick', 'click', function() { // 点击头像
+
+
+                    var area = ''
+                    var data = {
+                        uid: $(this).attr('post_uid') // 用户Uid
+
+                    }
+                    var data2 = $(this).attr('post_uid');
+                    _this.popupIframeLayer(data2); // iframe
+
+                    sendClientStat(curSite, 1, cmt_id, 'clk_head'); // 不要莫名其妙 这是统计代码
+                });
+
+                container.delegate('.newcoment', 'click', function() { // 点击显示回复数
+
+                    var trueId = $(this).attr('id').split('_')[1];
+                    $('#comment_' + trueId + '>ul.children li .newcoment').hide();
+                    $('#comment_' + trueId + '>ul.children li.undis').removeClass('undis').addClass('blueflag');
+
+                    _this.iframeHeight();
+
+                    $(this).hide();
+                    $('#comment_' + trueId).data('num', 0);
+
+
+                    $('#comment_' + trueId + '>ul.children li.blueflag').each(function(index, element) {
+                        _this.blueLine('#' + $(this).attr('id'));
+                    });
+                    sendClientStat(curSite, 1, cmt_id, 'clk_newreply_notice');
+
+
+                });
+
+                //加长评论的更多按钮20130730
+                container.delegate('.spreadMoreBtn', 'click', function() {
+                    $(this).prev().css('height', '');
+                    $(this).hide();
+                    _this.iframeHeight();
+                });
+
+                if( !$(top.window.document.body).find('#picPlayIframe').length ){
+                    var piciframe = '<iframe id="picPlayIframe0" src ="//news.qq.com/niuping_https/coralImgDom3.0.htm" allowTransparency="true"  frameborder="0" scrolling="no" style="display:none;width:100%;height:100%;z-index:999999;position:fixed;_position:absolute;*+position:fixed;top:0px;left:0px;border:none;overflow:hidden;"></iframe>'
+
+                    $(top.window.document.body).append(piciframe);
+                }
+
+
+                //评论图片点击放大201404161907 by link
+
+                container.delegate('.np-con-img', 'click', function() {
+
+                    //toggleFullScreen()
+                    var picHtml='';
+                    var $picData='' ;
+                    var picDataHtml='' ;
+                    var btnHtml = '';
+                    var $picPlayIframe;
+                    var order = $(this).attr('data-order'); //点击图片的位置
+                    var winH = $(top.window).height();
+                    var winW = $(top.window).width();
+                    var picH = $(this).attr('data-height');
+                    var picW = $(this).attr('data-width');
+                    var imgH = '';
+                    var imgW = '';
+                    var picPageFlag='none';
+                    var picCurrent = 0;
+                    var picTotal = 0;
+                    var picUrl = $(this).attr('src')
+
+                    //( winW - (picH*) )/2
+
+                    classTypePrve='';
+                    classTypeNext='';
+                    var picId = $(this).closest('.list_w100').attr('id')
+                    var picListHtml = ''
+                    // var picListHtml = $(this).closest('.list_w100').html()
+                    // picListHtml = picListHtml.replace(/\r|\n"/g,'')
+                    // picListHtml = picListHtml.replace(/\'|\\|\/|\"|\<|\>/g, function(e){
+                    //     //console.log("\\"+e)
+                    //     return "\\"+ e
+                    // })
+                    // 获取图片
+
+
+
+                    if(!$(top.window.document.body).find('#picPlayIframe').length ){
+
+                        $(top.window.document.body).find('#picPlayIframe0').remove();
+                        var piciframe = '<iframe  id="picPlayIframe" data-flag="main" data-id="'+ picId +'" data-order='+ $(this).attr('data-order') +' data-total='+ $(this).attr('data-total')
+                            +' src ="//news.qq.com/niuping_https/coralImgDom3.0.htm?'+ new Date().getTime() +'" allowTransparency="true"  frameborder="0" scrolling="no" '
+                            +'style="width:100%;height:100%;z-index:999999;position:fixed;_position:absolute;top:0px;left:0px;border:none;overflow:hidden;">'+'</iframe>'
+                        $(top.window.document.body).append(piciframe);
+                    }else{
+                        $(top.window.document.body).find('#picPlayIframe').show()
+                        $(top.window.document.body).find('#picPlayIframe').attr({
+                            'data-id': picId,
+                            'data-order': $(this).attr('data-order'),
+                            'data-total': $(this).attr('data-total'),
+                            'data-flag':'main'
+                        });
+                    }
+
+                });
+
+                // $(top.document.body).delegate('#picPrve','click',function(){
+                // })
+            },
+            /**
+             * 封装的用于显示登陆框的方法
+             * 方便日后不同登录方式的扩展
+             */
+
+            showLoginLayer: function() {
+
+                var _this = this;
+                publicLoginEvent();
+            },
+
+
+            /*登陆成功 - 更新状态 */
+
+            onLogined: function(uin, nick, headUrl) {
+
+
+                var  nnick ='';
+
+                nnick = nick.replace(/</g, "&lt;");
+                nnick = nnick.replace(/>/g, "&gt;");
+
+                var _this = this;
+                var o = this.options;
+                var uinn = ('' + uin).match(/[1-9][0-9]*/)[0]; // uin 可以直接传cookie里获取的，也可以传处理过的qq号
+                __uin = uinn || getUin();
+                var userInfoHTML = '';
+                var headImg = headUrl ? headUrl : defaultHeadPic; //如果拉取头像失败就用默认图片
+
+                //评论框个人登录态同步
+
+                o.$loginFlag.data('userPic', headUrl);
+                o.$loginFlag.data('nick', nick);
+
+                o.$loginBtn.html('发表评论');
+                o.$loginFlag.find('img').attr('src', headImg);
+                o.$loginFlag.find('em').html(nnick);
+
+                $('#loginFlag span:first').removeClass();
+                $('#loginFlag span:first a').removeClass();
+
+                // 好莱坞结束
+
+
+                o.$loginFlag.show();
+
+                $('#my-message .tipInfo').show();
+                $('.pop_user_login').hide();
+                $('#public_reply .np-btn-submit').html('回复');
+                $('.np-reply-box-info').show(); // 显示上传图片 20140819
+
+                _this.options.$loginFlag.data('userPic', headUrl);
+                _this.options.$loginFlag.data('nick', nick);
+
+                $('#my-message-list').html('');
+                $('#my-notification-list').html('');
+                $('#loadCmtMore').hide();
+
+                if (_this.options.loginuin) {
+                    _this.options.$top_textarea.focus();
+                }
+
+                _this.iframeHeight();
+
+                // 个人中心 参数 初始化
+
+                o.$urlapi_mycomment.msgid = '';
+                o.$urlapi.pageflag = '0';
+                o.$urlapi_mycomment.pageflag = '0';
+
+                _this.changeUid();
+
+                if (o.centerFlag) {
+                    o.$myCowComment.trigger('click'); // 退出以后 更新个人中心状态
+                }
+
+                if (o.changeFlag) { // 切换账号跳到'全部评论'
+                    o.$myAllComment.trigger('click');
+                    _this.reportInit();
+
+                    $('#tab2_myComments .tipInfo').removeClass('waitting').addClass('waitting').html('').show();
+                    $('#tab2_myComments .np-load-more').hide();
+                }
+
+            },
+
+            /* 退出 */
+
+            loginOut: function(flag) {
+
+                var o = this.options;
+                var uin = __uin;
+                __uin = null;
+                flag || this.options.$logoutTrigger.click();
+
+                o.$loginFlag.data('userPic','undefined');
+                o.$loginFlag.data('nick','undefined');
+                o.$loginFlag.hide();
+
+                $('#public_reply .np-btn-submit').html('登录');
+                o.$myAllComment.trigger('click'); // 退出以后 更新个人中心状态
+                o.$loginBtn.html('登录');
+
+                $('.np-reply-box-info').hide(); // 显示上传图片 20140819
+
+                //个人中心清空
+
+                $('#my-message-list').html('');
+                $('#my-notification-list').html('');
+                $('#loadCmtMore').hide();
+                $('#loadMsgMore').hide();
+                $.removeCookie('uid');
+
+            },
+
+            changeUid: function() {
+
+                var o = this.options;
+                var urlf = 'v_qq_com.comment';
+
+                if (this.options.film == 1) {
+                    urlf = 'film_direct.comment';
+                }
+
+                if (this.options.client == 1) {
+
+                    urlf = 'service.comment';
+                }
+
+                $.ajax({
+                    dataType: 'jsonp',
+                    url: o.fetchUrl + 'user/0?&source=0',
+                    success: function(data) {
+
+
+                        if(data.errCode == 0){
+
+                            if (o.huiyuan == 1) {
+
+                                if (data.data.hwvip == 1) {
+
+                                    $('#loginFlag span:first').addClass('hyw');
+                                    $('#loginFlag span.hyw a').addClass('huiyuan');
+                                    $('#loginFlag span.hyw a').attr('title', '会员尊享红名特权');
+                                    $('#loginFlag .huiyuan').addClass('p' + data.data.hwlevel);
+                                    $('#loginFlag .huiyuan').attr('href', 'http://film.qq.com/vip.html?ptag=' + urlf);
+                                } else {
+
+                                    $('#loginFlag span:first').addClass('hyw0');
+                                    $('#loginFlag span.hyw0 a').addClass('huiyuan0'); //开通会员尊享评论红名特权
+                                    $('#loginFlag span.hyw0 a').attr('title', '开通会员尊享评论红名特权');
+                                    $('#loginFlag .huiyuan').attr('href', 'http://film.qq.com/vip.html?ptag=' + urlf);
+
+                                }
+
+                            }
+                        }
+                    },
+                    error: function(res) {
+                        //alert(res);
+                    }
+                });
+
+
+            },
+
+            /**
+             * 获取当前用户的登陆态
+             * return：0 未登录,(0==false)； 1, 登录但没有开通微博；2,微博用户
+             */
+            getLoginStatus: function() {
+                if (__uin) {
+                    return 1;
+                }
+                return 0;
+            },
+
+            /**
+             * 点击发表按钮后的动作 /公共的submit
+             */
+
+            bindSubmitEvent: function() {
+
+                var _this = this;
+                var o = this.options;
+
+                // 提交事件
+                o.$loginBtn.unbind().click(function() {
+                    if (getUin() && $(this).html() != '登录') {
+                        _this.checkAndPublish(this.id);
+                        o.$insertFlag = 'comment';
+                    } else {
+                        _this.showLoginLayer();
+                    }
+                });
+
+                $('#submitFace').delegate('li','click',function(){
+                    $('#submitFace').hide();
+                    if($(this).hasClass('s_z')){
+                        o.faceico = 1;
+                    }else if($(this).hasClass('s_h')){
+                        o.faceico = 2;
+                    }else{
+                        o.faceico = 3;
+                    }
+                    o.$loginBtn.trigger('click');
+                });
+
+                $('#top_sj').on('click',function(){
+                    if (getUin() && $(this).html() != '登录') {
+                        $('#submitFace').show();
+                    } else {
+                        _this.showLoginLayer();
+                    }
+                });
+
+            },
+
+
+
+            /**
+             * 删除功能 2013.12.30
+             */
+
+
+            bindDeleteEvent: function() {
+
+                var _this = this;
+                var o = this.options;
+
+                $('#mainBody').delegate('.delete', 'click', function(event) {
+
+                    var __this = $(this);
+                    var divClass = 'popdelete';
+                    var liId = __this.attr('id').split('_')[1];
+
+
+                    if (getUin()) {
+
+                        if ($('#my-notification-list li.np-post:last').attr('id') == ('post_' + liId)) {
+                            divClass = 'popdeletee';
+                        }
+                        $('#my-notification-list li.np-post').css('z-index', '1');
+                        $('.popdeletee').remove();
+                        $('.popdelete').remove();
+                        $('#post_' + liId).css('z-index', '100');
+
+
+                        __this.css('position', 'relative');
+
+                        __this.append('<div class="' + divClass + '"><h4>您确定要永久删除此评论？</h4><p><input class="cancel" type="button" value="取消" id="d_cancel"/><input class="confirm" type="button" value="确定" id="d_confirm"/></p></div>');
+
+                        $('#d_confirm').click(function() {
+                            _this.postData(__this.attr('id'), __this.closest('[tid]').attr('tid'))
+                        })
+                        $('#d_cancel').click(function() {
+                            __this.find('div').remove();
+                            __this.css('position', 'relative')
+                        });
+
+
+                    } else {
+                        _this.showLoginLayer();
+                    }
+                    event.stopPropagation(); // 阻止冒泡
+
+                });
+
+                $doc.unbind().bind('click', function() {
+
+                    $('#my-notification-list .delete div').remove();
+
+                });
+
+            },
+
+
+
+            /**
+             * 举报功能 2013.9.22
+             */
+
+
+            bindReportEvent: function() {
+
+                var _this = this;
+                var o = this.options;
+
+                var publicReport = $('.np-report'); //获取页面举报框
+
+
+                $('#mainBody').delegate('.report', 'click', function() {  // 举报
+
+                    var __this = $(this);
+                    var _status = _this.getLoginStatus(); //先获取用户状态
+
+                    if (_status != 0) { // 如果用户存在
+
+                        if (!($(this).find('em').length)) {
+
+                            /*  安平举报暂时去掉*/
+                            $('#allComments .np-report').remove();
+                            $('#allComments li.np-post').css('z-index', '1');
+                            $(this).parent().append(publicReport.clone().show());
+                            var liId = $(this).attr('id').split('report_')[1];
+
+                            $('#' + liId).css('z-index', '100');
+                            $('#' + liId).parents('li.np-post').css('z-index', '100');
+
+
+                            /* 判断弹出框边界值 */
+
+                            if ($(this).attr('id').split('report_')[1] == $('#content li.np-post:last').attr('id')) {
+
+                                if (($('#content li.np-post:last .np-post-body:first').height() - 37) < 303) {
+                                    $('#content .np-report').css('top', '-290px');
+                                }
+                            }
+
+                            if ($(this).attr('id').split('report_')[1] == $('#content li.np-post').eq(-2).attr('id')) {
+
+                                if (($('#content li.np-post:last .np-post-body:first').height() + $('#content li.np-post').eq(-2).find('.np-post-body:first').height() - 37) < 303) {
+
+                                    $('#content .np-report').css('top', '-290px');
+
+                                }
+
+                            }
+
+                            if ($(this).attr('id').split('report_')[1] == $('#content li.np-post').eq(-3).attr('id')) {
+
+                                if (($('#content li.np-post:last .np-post-body:first').height() + $('#content li.np-post').eq(-2).find('.np-post-body:first').height() + $('#content li.np-post').eq(-3).find('.np-post-body:first').height() - 37) < 303) {
+
+                                    $('#content .np-report').css('top', '-290px');
+
+                                }
+
+                            }
+
+                            $(this).parent().find('.close').bind('click', function() {
+                                __this.parent().find('.np-report').remove();
+
+                                $('#content li.np-post').css('z-index', '1');
+                            });
+
+                            $(this).parent().find('.np-report-cancel').bind('click', function() {
+                                __this.parent().find('.np-report').remove();
+
+                                __this.parents('.np-post').trigger('mouseout');
+
+                                $('#content li.np-post').css('z-index', '1');
+
+                            });
+
+                            $(this).parent().find('#impeach_desc').focus(function() {
+                                $(this).val('');
+                                $(this).css('color', '#333');
+                            });
+
+                            $(this).parent().find('.np-report-submit').bind('click', function() {
+
+
+                                if (__this.parent().find("input[name='impeach_content']:checked").length) {
+                                    _this.postData(__this.attr('id'), __this.closest('[tid]').attr('tid')); //
+
+                                } else {
+
+                                    if (__this.parent().find('.np-report h5').find('span').length == 0) {
+
+                                        __this.parent().find('.np-report h5').append('<span id="RT">你必须选择一项才能举报!</span>');
+                                    }
+
+                                    setTimeout(function() {
+                                        $('#RT').remove()
+                                    }, 2000);
+
+                                }
+                            });
+                            o.reportId = $(this).attr('id');
+
+                        }
+
+                    } else {
+                        _this.showLoginLayer(); //登录
+
+                    }
+                });
+
+                //$('#mainBody').delegate('li.np-post', 'mouseover', function(event) {
+                //改进举报hover事件 20140819 by link
+                $('#mainBody').delegate('.np-post-body', 'mouseover', function(event) {
+                    var thisid = $(this).find('.popClick').attr('post_uid');
+                    if (thisid != $.cookie('uid')) {
+
+                        $('.report').hide();
+
+                        $(this).find('.report:first').show();
+
+                        event.stopPropagation();
+                    }
+
+                });
+
+
+                //$('#mainBody').delegate('.np-post', 'mouseout', function(event) {
+                $('#mainBody').delegate('.np-post-body', 'mouseout', function(event) {
+
+                    if (!($(this).find('.report em').length)) {
+
+                        $(this).find('.report:first').hide();
+                    }
+
+                    event.stopPropagation();
+
+                });
+
+
+            },
+
+
+            reportInit: function() {
+                var _this = this;
+                var o = this.options;
+                var postLi = o.$allComments.find('li.np-post .reportOn');
+                $.each(postLi, function(index, li) {
+                    $(this).removeClass('reportOn');
+                    $(this).find('em').remove();
+                });
+            },
+
+            //显示正在上传中！
+            isUpImg:function(id){
+                var $picList = $('#'+ id);
+
+                if($picList.find('.add_pic').text() != '+'){ // 是“上传中”
+                    if(!$picList.find('.upImgInfo').length){ // 没有提示
+                        $picList.find('.insert_piclist').append('<li style="padding-top:20px;color:red" class="upImgInfo">图片正在上传中！</li>');
+                    }
+
+                    setTimeout(function() {
+                        $picList.find('.upImgInfo').fadeOut().remove();
+                    }, 3000)
+
+                    return true;
+                }
+                return false;
+            },
+            /* 发表评论前数据检查 */
+
+            checkAndPublish: function(textAreaId, tid) {
+
+                var _this = this;
+                var o = this.options;
+                var popTextarea = textAreaId.replace(/pop/, "pop_text");
+                var _$content = $('#' + popTextarea);
+                var position = textAreaId.split('_')[0];
+
+
+
+                if (position == 'top') {
+                    //判断是否有图片正在上传。
+                    if(_this.isUpImg('insertPicList')){
+                        return false;
+                    }
+                    // if($('#top_textarea').val()!=''){
+
+                    //         $('#insertPicList .upimgbox').remove();
+                    //         $('#insertPicList').hide();
+                    //     }
+                    _$content = o.$top_textarea;
+
+                    sendClientStat(curSite, 1, cmt_id, 'pub_original'); // 发表原创评论统计
+
+                }else{
+                    //判断是否有图片正在上传。
+                    if(_this.isUpImg('insertPicList_reply')){
+                        return
+                    }
+
+                }
+
+                if ($.trim(_$content.val()).length == 0 || _$content.val() == o.topContentTips) {
+
+                    this.pubCallback(textAreaId, {
+                        ret: 1,
+                        error2show: '请输入内容！'
+                    });
+
+                } else if ($.trim(_$content.val()).realLength() > 2000) {
+
+                    alert('超过1000个字了');
+
+                } else {
+
+                    if (getUin()) { // 验证登陆态
+
+                        if (position == 'top') {
+                            o.$loginBtn.addClass('np-btn-submit-loading');
+                        }
+
+                        this.postData(textAreaId, tid); //
+
+                    } else {
+                        _this.showLoginLayer();
+                    }
+
+                }
+
+            },
+
+
+            /**
+             * 构造表单，以post方式发表评论
+             * @param position 用于标识是从顶部评论框发表(position == "top") 还是回复
+
+             textAraId:按钮id, tid:文章id
+
+             */
+            postData: function(textAreaId, tid) {
+
+                var o = this.options;
+                var _this = this;
+
+                this._pubTimer0 = new Date().getTime(); //Qoss时间戳
+                var ccskey = generateToken(getKey());
+                var popTextarea = textAreaId.replace(/pop/, "pop_text");
+                var parentId = textAreaId.split('_')[2];
+                var position = textAreaId.split('_')[0];
+                var cmtId = textAreaId.split('_')[2];
+                var upId = textAreaId.split('_')[1];
+                //图片组装
+                var imgArr = '';
+                var $img;
+                if(position == 'top' || position == 'pop' ){
+                    if(position == 'top'){
+
+                        $img = $('.insert_piclist img');
+
+                    } else if (position == 'pop'){
+
+                        $img = $('#'+ textAreaId.replace(/pop_/,'')).find('.insert_piclist img')
+                    }
+                    if ($img.length > 0) {
+                        imgArr += '[';
+                        for (var i = 0, len = $img.length; i < len; i++) {
+                            if (i > 0) {
+                                imgArr += ','
+                            }
+                            imgArr += $img.eq(i).attr('data');
+                        }
+                        imgArr += ']';
+                    }
+                }
+
+
+                o.dataImgObj = imgArr; // 存储图片列表，用于接口出错插入假数据
+
+                // 举报参数
+
+                var typeVal = ($("input[name='impeach_content']:checked").length) ? ($("input[name='impeach_content']:checked").val()) : ' ';
+                var descVal = $('#' + textAreaId).parent().find('input[name="impeach_desc"]').val();
+
+                if (position == 'top') { //发表主评
+
+                    this.submitForm({
+                        targetid: cmt_id,
+                        type: 1,
+                        format: 'SCRIPT', // 返回数据格式
+                        callback: o.topCallback,
+                        content: $.trim(o.$top_textarea.val()),
+                        _method: 'put',
+                        g_tk: ccskey,
+                        thrdes:o.faceico,
+                        code: 1,
+                        source: o.columSource,
+                        subsource: o.columsubSource,
+                        picture: imgArr //加图片
+
+                    });
+                } else if (position == 'pop') { // 发表回复
+
+                    $('#' + textAreaId).html('').removeClass('submit').addClass('np-btn-submit-loading'); //pop_comment_5752674778955669598
+                    this.submitForm({
+                        targetid: tid || cmt_id,
+                        type: 1,
+                        format: 'SCRIPT',
+                        callback: o.popCallback,
+                        content: $.trim($('#' + popTextarea).val()),
+                        _method: 'put',
+                        g_tk: ccskey,
+                        code: 1,
+                        source: o.columSource,
+                        subsource: o.columsubSource,
+                        picture: imgArr //加图片
+
+
+                    }, parentId);
+
+                } else if (position == 'report') { // 增加举报功能 2013-09-22
+
+                    this.submitForm({
+                        targetid: tid || cmt_id,
+                        type: typeVal,
+                        desc: descVal,
+                        enterapp: 'web',
+                        _method: 'put',
+                        commentid: cmtId,
+                        format: 'SCRIPT',
+                        g_tk: ccskey,
+                        callback: o.reportCallback
+
+                    }, position);
+
+                } else if (position == 'delete') {
+
+                    this.submitForm({
+                        targetid: tid || cmt_id,
+                        _method: 'delete',
+                        format: 'SCRIPT',
+                        g_tk: ccskey,
+                        callback: o.deleteCallback
+
+                    }, textAreaId);
+
+                }
+            },
+
+            /**
+             * 抽取postData中的公共代码
+             * 用于组装表单并发送
+             */
+
+
+            submitForm: function(fields, position) {
+
+                var o = this.options;
+                var loadUrl = '';
+                if (position) {
+
+                    if (position == 'report' || position == 'msg') {
+                        loadUrl = '//w.coral.qq.com/report/comment/0'
+                    } else if ((position.split('_')[0] == 'em' || position.split('_')[0] == 'am')) {
+                        loadUrl = o.wfetchUrl + 'article/comment/up/to/' + position.split('_')[1];
+                    } else if (position.split('_')[0] == 'delete') {
+
+                        loadUrl = '//w.coral.qq.com/article/comment/' + position.split('_')[1];
+
+                    } else {
+                        loadUrl = o.wfetchUrl + 'article/comment/to/' + position;
+                    }
+                } else {
+                    loadUrl = o.wfetchUrl + 'article/comment/';
+                }
+
+
+                //构造FORM表单
+
+                var _target = 'post_iframe';
+
+                if (!$('#post_iframe').length) {
+
+                    $body.append('<iframe id="post_iframe" name="post_iframe" style="display:none"><script type="text/javascript">document.domain = "qq.com";</script></iframe>');
+
+                }
+                var _$form = $('#_messageform').length ?
+                    $('#_messageform').attr('action', loadUrl).empty() :
+                    $('<form action="' + loadUrl + '" method="post" target="' + _target + '" id="_messageform" style="display:none;"></form>').appendTo($body);
+
+                for (name in fields) {
+                    _$form.append($('<input name="' + name + '" type="hidden" value="" />').val(fields[name]));
+                }
+                _$form.submit();
+
+            },
+
+
+            /**
+             * 发送BOSS统计
+
+             site: 根据当前频道域名上报不同
+
+             */
+            sendStat: function(site) {
+
+                var op;
+
+                if (site == 'coral') {
+                    op = 'pgv_commentdetail';
+                } else {
+                    op = 'pgv_articledetail';
+                }
+
+                sendClientStat(curSite, 2, cmt_id, op);
+
+            },
+
+
+            /**
+             * 发表评论的回调函数，用于展示评论发布成功或者错误的
+             * 该函数也有可能由前端调用，展示数据校验错误
+             * @param position 用于标识是从顶部评论框发表(position == "top") 还是 回复(position == "pop")
+             * @param data 接口返回的数据
+             * @param _pubTimer (optional)用于发送测速的时间戳
+             */
+
+            pubCallback: function(textAreaId, data, _pubTimer) {
+                var position = textAreaId.split('_')[0];
+                var o = this.options;
+                var _this = this.options;
+                var __this = this;
+                var tipsFonts = '评论成功!';
+                var rType = true;
+                var data1;
+
+                var erroWarning = function(errorCode) {
+                    switch (errorCode) {
+
+                        case 0:
+
+                            //__this._trigger('pubsuccess', null, data);
+                            __this.insertTempCommentFn(null, data)
+
+                            break;
+                        case 8:
+
+                            __this.showLoginLayer();
+
+                            break;
+                        case 9:
+                        case 13:
+                        case 14:
+                        case 16:
+                        case 17:
+                            // 这里造假数据
+                            //__this._trigger('pubsuccess', null, data1 );
+                            __this.insertTempCommentFn(null, data1)
+
+                            break;
+                        default:
+                            tipsFonts = '系统出错请稍后再发';
+                    }
+
+                }
+
+                //图片组装
+                var imgArr = {};
+                if(o.dataImgObj!='[]'&&o.dataImgObj!=''){
+                    imgArr = jQuery.parseJSON(o.dataImgObj)
+                }
+
+
+                if (position == 'top') { // 顶部发表主评
+
+                    // 顶部的图片
+                    //imgArr = imgList( $('#commentArea .insert_piclist img') );
+
+                    if($('#top_textarea').val()!==''){
+                        $('#insertPicList .upimgbox').remove();
+                        $('#insertPicList').hide();
+                    }
+
+
+                    if (data.ret) {
+
+                        tipsFonts = data.error2show || '<b>囧</b>... 出错了！ ';
+
+                        rType = false;
+                        setTimeout(function() {
+                            _this.$top_textarea.focus();
+                            _this.$topReply.find('span.np-tip-error').html(tipsFonts).fadeOut('fast')
+                        }, 2000);
+
+                    } else {
+                        data1 = {
+                            data: {
+                                'parent': "0",
+                                'commentid': (new Date()).getTime(),
+                                'time': parseInt((new Date()).getTime()/1000),
+                                'content': ("" + __this.encodeHTML(_this.$top_textarea.val()) + ""),
+                                'checktype': '0',
+                                'picture': imgArr
+                            }
+                        };
+                        erroWarning(data.errCode);
+                        _this.$loginBtn.removeClass('np-btn-submit-loading');
+
+                    }
+
+                    _this.$topReply.find('span.np-tip-error').html(tipsFonts).fadeIn('fast');
+
+                    if (rType) {
+                        _this.$top_textarea.val('');
+                        setTimeout(function() {
+                            _this.$topReply.find('span.np-tip-error').hide();
+                            _this.$topReply.find('span.fontsline').show();
+                        }, 2000);
+                    }
+
+
+                } else if (position == 'pop') { // 评论区域回复
+
+                    var liId = textAreaId.replace(/pop_/, '');
+                    var nowId = $('#' + liId + '>.children .tips'); // 本地验证
+                    var tipsWrap = $('#content').find('.pop_reply:visible .np-tip-error'); // 服务器返回错误信息验证
+                    var trueTextarea = $('#content').find('.pop_reply:visible textarea');
+                    var nowTextId = textAreaId.replace(/pop/, "pop_text");
+
+                    //imgArr = imgList( $('#public_reply .insert_piclist img') );
+                    if($('#public_reply textarea').val()!=''){
+                        $('#insertPicList_reply .upimgbox').remove();
+                        $('#insertPicList_reply').hide();
+                    }
+
+
+                    if (data.ret) {
+                        tips = data.error2show || '<b>囧</b>... 出错了！ ';
+                        nowId.html(tips).hide().fadeIn('slow');
+                        setTimeout(function() {
+                            $('#' + nowTextId).focus();
+                            nowId.html('')
+                        }, 2000); //2秒钟后focus
+
+                    } else {
+
+                        data1 = {
+                            data: {
+                                parent: _this.replylistId,
+                                commentid: (new Date()).getTime(),
+                                time: parseInt((new Date()).getTime()/1000),
+                                content: (__this.encodeHTML($(trueTextarea).val())),
+                                checktype: '0',
+                                picture: imgArr
+                            }
+                        };
+                        erroWarning(data.errCode);
+                        tipsWrap.html(tipsFonts).hide().fadeIn('slow');
+                        $('#content').find('.pop_reply:visible .np-reply-box-footer a').removeClass('submitOn').addClass('submit').html('回复');
+                        setTimeout(function() {
+                            $(trueTextarea).focus();
+                            tipsWrap.html('')
+                        }, 2000); //2秒钟后focus
+
+                    }
+
+                } else if (position == 'report') {
+
+                    if (data.errCode == 0) {
+
+                        $('#report_comment_' + data.data.commentid).html('').append('<em>24小时内给您反馈，见我的牛评</em>');
+                        $('#report_top_' + data.data.commentid).html('').append('<em>24小时内给您反馈，见我的牛评</em>');
+                        $('#report_msg_' + data.data.commentid).html('').append('<em>24小时内给您反馈，见我的牛评</em>');
+
+
+                    } else if (data.errCode == 12) {
+                        $('#' + _this.reportId).html('').append('<em>您今天举报的条数已达上限</em>');
+                    } else {
+
+                        $('#' + _this.reportId).html('').append('<em>该评论已被举报或处理!</em>');
+
+                    }
+                    $('#' + _this.reportId).addClass('np-btn-active');
+                    $('.np-report').remove();
+
+                } else if (position == 'delete') {
+
+                    if (data.errCode == 0) {
+                        $('#post_' + data.data.commentid).animate({
+                            height: '0px'
+                        }, 'slow', function() {
+                            $(this).remove();
+                            __this.iframeHeight();
+                        });
+
+                    }
+
+                }
+
+                //Qoss 发布接口测速
+                if (_pubTimer) {
+                    Qoss('hfpljk', this._pubTimer0, {
+                        3: _pubTimer
+                    });
+                }
+
+            },
+
+            encodeHTML: function(str) {
+
+                var s = '';
+
+                if (str.length == 0) return "";
+
+                s = str.replace(/&/g, "&gt;");
+                s = s.replace(/</g, "&lt;");
+                s = s.replace(/>/g, "&gt;");
+                s = s.replace(/ /g, "&nbsp;");
+                s = s.replace(/\'/g, "&#39;");
+                s = s.replace(/\"/g, "&quot;");
+                s = s.replace(/\n/g, "<br>");
+
+                return s;
+
+            },
+
+            /**
+             * 当用户发表评论成功后，将评论内容展示在评论列表中
+             * @param _content 需要展示的微博内容
+             * @param _pubTime 微博发布的时间
+
+             */
+
+            //insertTempComment: function(commentid, _content, parentid, _pubTime, check) {
+
+            insertTempComment: function(data) {
+
+                var commentid = data.data.commentid || '',
+                    _content = data.data.content || '',
+                    _custom = data.data.custom || '',
+                    parentid = data.data.parent || '',
+                    _pubTime = data.data.time || '',
+                    check = data.data.checktype || '',
+                    imgArr = data.data.picture || '',
+                    imgHtml = '';
+
+                var _this = this;
+                var o = this.options;
+
+                var uin = __uin || getUin();
+                var userName = o.$loginFlag.find('.np-user').html();
+                var userPic = o.$loginFlag.find('img').attr('src');
+
+                var hclass = '',
+                    hnum = '',
+                    hwvip = '',
+                    hwlevel = '';
+
+                var vip1 = '',
+                    vip2 = '';
+
+                o.faceico = '';
+
+                if (o.$loginFlag.find('span:first').hasClass('hyw')) {
+                    hclass = o.$loginFlag.find('.huiyuan').attr('class');
+                    hnum = hclass.replace(/[^0-9]/ig, "");
+                    hwvip = 1;
+                    hwlevel = parseInt(hnum);
+
+                    vip1 = 'hyy';
+                    vip2 = 'huiyuan p' + hwlevel;
+                } else if (o.$loginFlag.find('span:first').hasClass('hyw0')) {
+
+                    vip1 = 'hyy0';
+                    vip2 = 'huiyuan0';
+
+                }
+
+
+                var newstrHTML = '';
+                var postLiwraper = '';
+
+                var trueC = _content.replace('<script>', '&lt;script&gt;');
+                trueC = trueC.replace('</script>', '&lt;/script&gt;');
+
+
+                var imgHtml = '';
+                var imgWH = '';
+
+                if (imgArr != undefined && imgArr.length) {
+                    imgHtml =  '<div><ul class="list_w100" id="pic_'+ commentid +'">';
+
+                    for(var j=0, len=imgArr.length; j<len;j++){
+                        if(imgArr[ j ].width>imgArr[ j ].height){
+                            imgWH = 'height=100';
+                        }else{
+                            imgWH = 'width=100'
+                        }
+                        imgHtml += '<li class="list_item"><a href="javascript:void(0)" class="figure"><img data-order="'+ j +'" data-total="'+ len +'" '+ imgWH +' class="np-con-img" data-width = "'+imgArr[ j ].width+'" data-height = "'+imgArr[ j ].height+'" src="' + imgArr[ j ].url + '/100" /></a></li>'
+                    }
+                    imgHtml += '</ul></div>'
+                }
+
+
+                if (check == 1) {
+                    var info = {
+                        id: commentid, // 用户Uid
+                        parent: 0,
+                        time: _pubTime, // 头像地址
+                        content: _content, // 评论数
+                        custom:_custom,
+                        up: 0,
+                        poke:0,
+                        userinfo: {
+                            userid: $.cookie('uid'),
+                            commentnum: '',
+                            upnum: 0,
+                            nick: userName,
+                            head: userPic,
+                            region: '',
+                            hwvip: hwvip,
+                            hwlevel: hwlevel
+                        },
+                        picture: imgArr
+                    };
+
+                    newstrHTML = _this.creatHtml(info, 'blueflag', o.$insertFlag);
+                } else {
+
+                    newstrHTML = '<li class="np-post temporary blueflag" id="comment_' + commentid + '"><div class="np-tip-newpost"></div><img class="np-avatar" src="' + userPic + '" alt="头像"><div class="np-post-body"><div class="np-post-header"><span class="' + vip1 + '"><a href="javascript:void(0)" class="np-user">' + userName + '</a><a href="http://film.qq.com/vip.html?ptag=film_direct.comment" target="_blank" class="' + vip2 + '" title="会员尊享红名特权"></a></span><span class="np-time">刚刚</span></div>'
+                        +'<div class="np-post-content"><p>' + trueC + '</p>'
+                        +'</div>'
+                        + imgHtml
+                        +'</div></li>';
+
+                }
+
+                if (parseInt(parentid) != 0) {
+
+                    if ($('#top_' + parentid).length || $('#comment_' + parentid).length || $('#post_' + parentid).length || $('#msg_' + parentid).length) {
+
+                        $('#top_' + parentid + '>ul.children').prepend(newstrHTML).children('div.pop_reply').hide();
+
+                        $('#comment_' + parentid + '>ul.children').prepend(newstrHTML).children('div.pop_reply').hide();
+
+                        $('#post_' + parentid + '>ul.children').children('div.pop_reply').hide();
+
+                        $('#msg_' + parentid + '>ul.children').prepend(newstrHTML).children('div.pop_reply').hide();
+
+                        _this.iframeHeight();
+                    }
+                } else {
+                    if ($('#allComments .tipInfo:visible')) {
+                        $('#allComments .tipInfo').hide();
+                    }
+
+                    if (o.$allComments.find('.np-title-new').length) {
+
+                        o.$allComments.find('.np-title-new').after(newstrHTML);
+                        var elementTop = $('#comment_' + commentid).offset().top + $(top.document).scrollTop();
+                        $(top.document.body).animate({
+                            scrollTop: elementTop
+                        }, 800);
+                        $(top.window).scrollTop(elementTop);
+
+
+                    } else {
+
+                        o.$allComments.find('.post-list').prepend(newstrHTML);
+                    }
+
+                    _this.iframeHeight();
+                }
+
+                if (o.$insertFlag != 'post') {
+
+                    _this.blueLine('#' + o.$insertFlag + '_' + commentid);
+
+                } else {
+
+                    _this.blueLine('#comment_' + commentid);
+                }
+
+            },
+
+            /*  同步评论框 外iframe高度方法  */
+
+            iframeHeight: function() {
+
+                var contentHeight = $('#mainBody').height();
+
+                if($(parent.document.body).find('#commentIframe1').length){
+
+                    $(parent.document.body).find('#commentIframe1').height(contentHeight);
+                }else{
+
+                    $(parent.document.body).find('#commentIframe').height(contentHeight);
+
+                }
+
+
+                if (parent.registerCoralEvent) {
+
+                    if (parent.registerCoralEvent.iframeHeight) {
+
+                        parent.registerCoralEvent.iframeHeight();
+
+                    }
+                }
+
+
+            },
+
+            /*****
+
+             弹出框 -iframe 版本
+
+
+             ******/
+
+
+            popupIframeLayer: function(data) {
+
+                var _this = this;
+
+                // 动态创建 Iframe
+
+                $(top.document.body).append('<iframe src ="//news.qq.com/niuping_https/coralPopDom3.0.htm" allowTransparency="true"  frameborder="0" scrolling="no" style="width:100%;height:100%;z-index:999999;position:fixed;_position:absolute;*+position:fixed;_left:100px;top:0px;left:0px;border:none;overflow:hidden;" id="np-pop-iframe" data-id = ' + data + '></iframe>');
+
+
+                if(/msie 6/i.test(navigator.userAgent)) {
+                    if ($(top.document.body).find('#np-pop-iframe').length != 0) {
+
+                        $(top.document.body).find('#np-pop-iframe').css('position', 'absolute');
+                    }
+
+                }
+
+            },
+
+
+            /**
+             * 其他UI事件的绑定
+             */
+            bindOtherEvents: function() {
+
+                var _this = this;
+                var o = this.options;
+
+                //新版toptextarea
+
+                //o.$top_textarea.width(o.$top_textarea.parent().outerWidth()-20);
+
+                o.$top_textarea.height(60);
+
+                //o.$top_textarea.parent().parent().find('.np-reply-box-footer').height(0).hide();
+
+                o.$top_textarea.css("padding", "10px");
+
+                $('#np-reply-box').delegate('a.change', 'click', function() { // 切换账号
+
+                    o.changeFlag = 1;
+                    _this.showLoginLayer();
+
+                });
+
+                o.$top_textarea.focus(function() {
+
+                    $(this).parent().parent().addClass('checkon');
+
+                });
+
+                o.$top_textarea.blur(function() {
+
+                    $(this).parent().parent().removeClass('checkon');
+
+                });
+
+
+                /** 我的牛评登陆验证 **/
+
+                o.$myCowComment.unbind().bind('click', function() {
+
+
+                    var _status = _this.getLoginStatus(); //先获取用户状态
+                    sendClientStat(curSite, 1, cmt_id, 'clk_myniuping');
+                    if (_status != 0) { // 如果用户存在
+
+                        $(this).addClass('np-active');
+                        o.$myAllComment.removeClass('np-active');
+                        o.$allComments.hide();
+                        o.$myComments.show();
+
+
+                        $('#mytips').trigger('click');
+                        if ($('#popMsg').css('display') != 'none') {
+
+                            _this.loadMyMessage();
+                            $('#my-message .tipInfo').hide();
+                            $('#popMsg').html('').hide();
+                            $('#mytips').trigger('click'); //
+                            return;
+                        }
+
+                        if ($(this).hasClass('np-active')) {
+
+                            if ($('#popMsg').html() == '') {
+
+                                if ($('#my-message-list li').length >= 0) {
+                                    return
+                                }
+                                //$('#my-message-list').html('');
+                                //_this.loadMyMessage();//个人中心的提醒
+
+                                $('#popMsg').html('').hide();
+                            } else {
+
+                                $('#my-message-list').html('');
+                                $('#popMsg').html('').hide();
+                                _this.loadMyMessage();
+
+                            }
+                            return;
+                        }
+
+                        if (!$(this).hasClass('np-active')) { // 如果没有 .on 排除点击二次
+
+                            if ($('#my-message-list li').length) {
+
+                                if ($('#popMsg').css('display') != 'none') {
+
+                                    $('#my-message-list').html('');
+                                    $('#popMsg').html('').hide();
+                                    _this.loadMyMessage();
+                                }
+                            } else {
+
+                                //_this.loadMyMessage();
+                                return;
+                            }
+                        } else if ($('#popMsg').css('display') != 'none') {
+
+                            $('#my-message-list').html('');
+
+                            _this.loadMyMessage();
+
+                            $('#popMsg').html('').hide();
+
+                        }
+                        _this.checkAndPublish(this.id);
+
+                    } else { //未登陆
+
+                        o.centerFlag = 1;
+                        $('#my-message .tipInfo').hide();
+                        $('#my-notification .tipInfo').hide();
+                        _this.showLoginLayer();
+                    }
+
+                });
+
+                o.$myAllComment.unbind().bind('click', function() {
+                    $(this).addClass('np-active');
+                    o.$myCowComment.removeClass('np-active');
+                    o.$allComments.show();
+                    o.$myComments.hide();
+                    _this.iframeHeight();
+                    //$('#myuserInfo').hide();
+
+
+                });
+
+            },
+
+            /**
+             将服务器时间戳 转换方法
+             **/
+
+            formatTime: function($time) {
+
+                var $nowdate = this.options.$nowDate;
+
+                var $Num = $nowdate / 1000 - $time;
+                if ($Num < 1) {
+                    return "刚刚";
+                }
+                if ($Num < 60) {
+                    return Math.floor($Num) + "秒钟前"
+                }
+                if ($Num < 3600) {
+                    return Math.floor($Num / (60)) + "分钟前"
+                }
+                if ($Num < 24 * 3600) {
+                    return Math.floor($Num / (3600)) + "小时前"
+                }
+                if ($Num < 24 * 3600 * 7) {
+                    return Math.floor($Num / (24 * 3600)) + "天前"
+                }
+                var d = new Date($time * 1000),
+                    s = d.getFullYear() + "-";
+                s += (d.getMonth() + 1) + "-";
+                s += d.getDate();
+                return s;
+            },
+            /**
+             评论内容超过120px = 行高数*5（五行）隐藏方法
+             **/
+            conHeight: function(a) {
+
+                var _this = this;
+                var $conClass = $('#allComments .np-post .np-post-content[data-height!=5]');
+                var lineH = 24;
+                if ($('#allComments .np-post .np-post-content').length) {
+                    if (/px/.test($conClass.css('line-height'))) {
+
+                        lineH = $conClass.css('line-height').split('px')[0];
+                    }
+                    if (a == 2) {
+                        $conClass = $('#my-message-list .np-post .np-post-content[data-height!=5] p');
+                    }
+                    if (a == 3) {
+                        $conClass = $('#my-notification-list .np-post .np-post-content[data-height!=5]');
+                    }
+                    if (a == 5) {
+                        $conClass = $('#allComments .topIco .np-post-content[data-height!=5]');
+                    }
+                    $conClass.each(function(index, element) {
+                        $(this).attr('data-height', '5');
+                        if ($(this).height() > lineH * 6 && !$(this).next('.spreadMoreBtn').length) {
+                            $(this).css({
+                                height: lineH * 5,
+                                'overflow': 'hidden'
+                            });
+                            //$(this).after('<div class=\"\"><span>展开</span></div>');
+                            $(this).after('<a href="javascript:void(0)" class="spreadMoreBtn np-btn np-btn-spread"><i class="np-icon np-icon-spread"></i></a>');
+                        }
+                    });
+
+                }
+            },
+
+            /**
+
+             更新时间状态
+
+             **/
+
+            updateTime: function() {
+
+                var o = this.options;
+                var _this = this;
+                o.$content.find('.uptime').each(function() {
+                    $(this).html(_this.formatTime($(this).attr('date')));
+                })
+                $('#my-message').find('.time').each(function() {
+                    $(this).html(_this.formatTime($(this).attr('date')));
+                })
+                $('#my-notification').find('.post-time span').each(function() {
+                    $(this).html(_this.formatTime($(this).attr('date')));
+                })
+                $('#hiddenCon').find('.uptime').each(function() {
+                    $(this).html(_this.formatTime($(this).attr('date')));
+                })
+            },
+            /**
+
+             截取字符串
+             **/
+
+            subString: function(str, n) {
+                str = str || '';
+                var r = /[^\x00-\xff]/g;
+                if (str.replace(r, "mm").length <= n) {
+                    return str;
+                }
+                var m = Math.floor(n / 2);
+                for (var i = m; i < str.length; i++) {
+                    if (str.substr(0, i).replace(r, "mm").length >= n) {
+                        return str.substr(0, i) + "...";
+                    }
+                }
+                return str;
+            },
+            /************************* link 个人中心数据渲染***************************************/
+
+
+            myCreateHtml: function(info, type, blueflag) { // 创建 dom
+
+                var o = this.options;
+                var _this = this;
+                var newstrHTML = "";
+                var picUrl = '',
+                    HUIFU = false,
+                    DING = false,
+                    Userlist = "",
+                    leftGrid = '',
+                    article = '';
+                var replyString = ""
+                var listId = 'msg_';
+                var urlf = 'v_qq_com.comment'; // 视频站个性化-上报数据
+                if (this.options.film == 1) {
+                    urlf = 'film_direct.comment';
+                }
+                //var titleHtml = '';
+                var popClick = o.popupInfo;
+                // titleHtml = '<a href = "javascript:void(0)" class="np-link-weak"href="' + (info.targetinfo ? info.targetinfo.url : '') + '">' + info.targetinfo.title + '</a>';
+
+                var vip1 = '';
+                var vip2 = '';
+
+                //201404161813 新加个人中心图片显示
+                var moreLink = '';
+                if (info.repnum != 0) {
+                    //moreLink = _this.creatPostLink(info)
+                    moreLink = '';
+                }
+                if(info.content){
+                    var imgHtml = '<p>' + info.content.replace(/\n/g, '<br />') + moreLink + '</p>';
+                }
+
+                var imgWH = '';
+
+
+                //201408261805 新加图片显示
+                if (info.picture != undefined && info.picture.length) {
+                    imgHtml +=  '<div><ul class="list_w100" id="pic_'+ info.id +'">';
+                    for(var j=0, len=info.picture.length; j<len;j++){
+                        if(info.picture[ j ].width>info.picture[ j ].height){
+                            imgWH = 'height=100';
+                        }else{
+                            imgWH = 'width=100'
+                        }
+                        imgHtml += '<li class="list_item"><a href="javascript:void(0)" class="figure">'
+                            +'<img data-order="'+ j +'" data-total="'+ len +'" data-width="'+ info.picture[ j ].width +'" data-height="'+ info.picture[ j ].height +'" '+ imgWH +' class="np-con-img" src="' + info.picture[ j ].url + '/100" /></a></li>'
+                    }
+                    imgHtml += '</ul></div>'
+                }
+
+
+                if (type == 'message') { //提醒判断
+
+                    //顶
+                    if (info.tipstype == '4' && info.userlist) {
+                        if (info.userlist.length > 0) {
+                            $.each(info.userlist, function(i, uInfo) {
+                                // 增加好莱坞VIP
+                                if (o.huiyuan == 1) { // 是否是视频站
+                                    if (uInfo.hwvip == 1) {
+                                        vip1 = 'hyy';
+                                        vip2 = 'huiyuan p' + uInfo.hwlevel;
+                                    }
+                                }
+                                if (i > 0) {
+                                    Userlist += "、"
+                                }
+                                Userlist += '<span class="' + vip1 + '"><a href="javascript:void(0)" post_uid=' + uInfo.userid + '  class="np-user ' + popClick + '">' + uInfo.nick + '</a><a href="http://film.qq.com/vip.html?ptag=' + urlf + '" target = "_blank" class="' + vip2 + '"></a></span>'
+                            });
+                            if (info.userlist.length < info.up) {
+                                Userlist += "等"
+                            }
+                        }
+
+                        //如果只发了一张图片，没有内容，那么显示“发表了一张图片”
+
+                        newstrHTML = '<li class="post np-post ' + blueflag + '" id="msg_' + info.id + '" tid="' + info.targetinfo.targetid + '">' + '<div class="np-post-header">' + '<span class="np-avatar np-avatar-upvote"></span>' + Userlist + info.up + '顶了你的评论：<span class="np-text-strong">' + ($.trim(info.content) == '' ? '发表了一张图片' : _this.subString(info.content, 46)) + moreLink + '</span>' + '<span class="np-time" date="' + info.tipstime + '">' + _this.formatTime(info.tipstime) + '</span>' + '</div>' + '<div class="np-post-content"><a class="np-link-weak" target="_blank" href="' + (info.targetinfo ? info.targetinfo.url : '') + '">' + info.targetinfo.title + '</a></div>' + '<div class="np-post-footer"></div>' + '<ul class="children"></ul></li>'
+
+                    }
+
+
+
+                    if (info.tipstype == '8') {
+                        // 增加好莱坞VIP
+                        if (o.huiyuan == 1) { // 是否是视频站
+                            if (info.userinfo.hwvip == 1) {
+                                vip1 = 'hyy';
+                                vip2 = 'huiyuan p' + info.userinfo.hwlevel;
+                            }
+                        }
+                        if (info.userinfo.head) {
+                            picUrl = info.userinfo.head.replace(/140/, "40") || '//t0.qlogo.cn/mbloghead/01676c4b10bbdb6f2618/50';
+                        }
+                        newstrHTML += '<li class="np-post ' + blueflag + '" id="msg_' + info.id + '" tid="' + info.targetinfo.targetid + '">'
+                            + '<div class="np-post-body">' + '<div class="np-post-header">'
+                            + '<img class="np-avatar ' + popClick + '"  post_uid="' + info.userinfo.userid + '" src="' + picUrl + '" alt="头像">'
+                            + '<span class="' + vip1 + '">'
+                            + '你的好友<a href="javascript:void(0)" class="np-user ' + popClick + '" post_uid="' + info.userinfo.userid + '">' + info.userinfo.nick + '</a>'
+                            + '<a href="http://film.qq.com/vip.html?ptag=' + urlf + '" target = "_blank" class="' + vip2 + '"></a>'
+                            + '</span>'
+                            + '参与了同篇内容的讨论<span class="np-text-strong"></span>'
+                            + '<span class="np-time" date="' + info.tipstime + '">' + _this.formatTime(info.tipstime) + '</span>'
+                            + '<a class="np-btn np-btn-report report" id="report_msg_' + info.id + '">举报</a></div>' + '<div class="np-post-content">'
+                            + imgHtml
+                            + '<a class="np-link-weak" target="_blank" href="' + (info.targetinfo != undefined ? info.targetinfo.url : '') + '">' + info.targetinfo.title + '</a>'
+                            + '</div>'
+                            + '<div class="np-post-footer">'
+                            + '<a href="javascript:void(0)" class="np-btn np-btn-upvote upvote" id="am_' + info.id + '">(<em>' + info.up + '</em>)</a>'
+                            + '<a href="javascript:void(0)" class="np-btn np-btn-reply reply">回复</a>' + '</div></div>' + '<ul class="children"></ul>' + '</li>'
+
+                    }
+
+
+
+                    //回复
+                    if (info.tipstype == '3') {
+                        // 增加好莱坞VIP
+                        if (o.huiyuan == 1) { // 是否是视频站
+                            if (info.userinfo.hwvip == 1) {
+                                vip1 = 'hyy';
+                                vip2 = 'huiyuan p' + info.userinfo.hwlevel;
+                            }
+                        }
+                        if (info.userinfo.head) {
+                            picUrl = info.userinfo.head.replace(/140/, "40") || '//t0.qlogo.cn/mbloghead/01676c4b10bbdb6f2618/50';
+                        }
+                        newstrHTML += '<li class="np-post ' + blueflag + '" id="msg_' + info.id + '" tid="' + info.targetinfo.targetid + '">'
+                            + '<div class="np-post-body">' + '<div class="np-post-header">'
+                            + '<img class="np-avatar ' + popClick + '"  post_uid="' + info.userinfo.userid + '" src="' + picUrl + '" alt="头像">'
+                            + '<span class="' + vip1 + '">'
+                            + '<a href="javascript:void(0)" class="np-user ' + popClick + '" post_uid="' + info.userinfo.userid + '">' + info.userinfo.nick + '</a>'
+                            + '<a href="http://film.qq.com/vip.html?ptag=' + urlf + '" target = "_blank" class="' + vip2 + '"></a>'
+                            + '</span>'
+                            + '回复了你的评论<span class="np-text-strong">' + _this.subString(info.parentinfo.content, 46) /*+ _this.creatPostLink(info.parentinfo)*/ + '</span>'
+                            + '<span class="np-time" date="' + info.tipstime + '">' + _this.formatTime(info.tipstime) + '</span>'
+                            + '<a class="np-btn np-btn-report report" id="report_msg_' + info.id + '">举报</a></div>' + '<div class="np-post-content">'
+                            //+'<p>'+ info.content.replace(/\n/g,'<br />') + _this.creatPostLink(info) +'</p>'
+                            + imgHtml
+                            + '<a class="np-link-weak" target="_blank" href="' + (info.targetinfo != undefined ? info.targetinfo.url : '') + '">' + info.targetinfo.title + '</a>'
+                            + '</div>'
+                            + '<div class="np-post-footer">'
+                            + '<a href="javascript:void(0)" class="np-btn np-btn-upvote upvote" id="am_' + info.id + '">(<em>' + info.up + '</em>)</a>'
+                            + '<a href="javascript:void(0)" class="np-btn np-btn-reply reply">回复</a>' + '</div></div>' + '<ul class="children"></ul>' + '</li>'
+
+                    }
+
+
+                    //被引用
+                    if (info.tipstype == '6') {
+
+                        picUrl = '//t0.qlogo.cn/mbloghead/01676c4b10bbdb6f2618/50';
+                        newstrHTML += '<li class="np-post ' + blueflag + '" id="msg_' + info.id + '" tid="' + info.targetinfo.targetid + '">';
+                        newstrHTML += '<div class="np-post-body">';
+                        newstrHTML += '<div class="np-post-header">';
+                        newstrHTML += '<img class="np-avatar ' + popClick + '"  post_uid="' + info.userinfo.userid + '" src="' + picUrl + '" alt="头像">';
+                        newstrHTML += '文章<a href="javascript:void(0)" style="cursor:default">' + info.targetinfo.title + '</a>引用了你的评论<span class="np-text-strong">' + _this.subString(info.content, 46) + '</span>';
+                        newstrHTML += '<span class="np-time" date="' + info.tipstime + '">' + _this.formatTime(info.tipstime) + '</span>';
+                        newstrHTML += '</div>';
+                        newstrHTML += '<div class="np-post-content">';
+                        newstrHTML += '<a class="np-link-weak" target="_blank" href="' + (info.targetinfo ? info.targetinfo.url : '') + '">' + info.targetinfo.title + '</a>';
+                        newstrHTML += '</div>';
+                        newstrHTML += '<div class="np-post-footer">';
+                        newstrHTML += '</div></div>';
+                        newstrHTML += '<ul class="children"></ul>';
+                        newstrHTML += '</li>'
+
+                    }
+
+                    //举报
+
+                    var alink, atitle = ' ';
+                    if (info.targetinfo) {
+                        alink = info.targetinfo.url || '';
+                        atitle = info.targetinfo.title || '';
+                    }
+
+
+                    if (info.tipstype == '5') { // 举报评论
+                        newstrHTML += '<li class="post np-post ' + blueflag + '">';
+                        newstrHTML += '<div class="np-post-header">';
+                        newstrHTML += '<span class="np-avatar np-avatar-report"></span>';
+                        newstrHTML += '你举报了<a href="javascript:void(0)" post_uid=' + info.userinfo.userid + '  class="np-user ' + popClick + '">' + ((info.userinfo.nick != '') ? (info.userinfo.nick) : '网友') + '</a>';
+                        newstrHTML += '的评论：<span class="np-text-strong">' + _this.subString(info.content, 46) + '</span>';
+                        newstrHTML += '<span class="np-time time" date="' + info.tipstime + '">' + _this.formatTime(info.tipstime) + '</span>';
+                        newstrHTML += '</div>';
+                        newstrHTML += '<div class="np-post-content">';
+                        newstrHTML += '<div class="message-content">';
+                        newstrHTML += '<div>' + (info.checkstatus == 2 ? "经审核被删除" : "经审核举报无效") + '</div>';
+                        newstrHTML += '</div>';
+                        newstrHTML += '<a class="np-link-weak" target="_blank"  href="' + alink + '">' + atitle;
+                        newstrHTML += '</a></div><div class="np-post-footer"></div></li>';
+
+                    }
+
+                    if (info.tipstype == '9') {  //举报用户
+                        newstrHTML += '<li class="post np-post ' + blueflag + '">';
+                        newstrHTML += '<div class="np-post-header">';
+                        newstrHTML += '<span class="np-avatar np-avatar-report"></span>';
+                        newstrHTML += '你举报的用户<a href="javascript:void(0)" post_uid=' + info.userinfo.userid + '  class="np-user ' + popClick + '">' + ((info.userinfo.nick != '') ? (info.userinfo.nick) : '网友') + '</a>';
+
+                        newstrHTML += '<span class="np-time time" date="' + info.tipstime + '">' + _this.formatTime(info.tipstime) + '</span>';
+                        newstrHTML += '</div>';
+                        newstrHTML += '<div class="np-post-content">';
+                        newstrHTML += '<div class="message-content">';
+                        newstrHTML += '<div>' + (info.reportinfo.checkstatus == 1 ? "经审核举报无效" : "已经被禁言") + '</div>';
+                        newstrHTML += '</div>';
+                        newstrHTML += '<a class="np-link-weak" target="_blank"  href="' + alink + '">' + atitle;
+                        newstrHTML += '</a></div><div class="np-post-footer"></div></li>';
+
+                    }
+
+
+
+
+                    var headP = info.userinfo.head ? info.userinfo.head.replace(/140/, "40") : '';
+                }
+
+                if (type == 'myComment') {
+                    listId = 'post_';
+                    var lineone = '';
+                    if (info.parent != 0 && info.parentinfo) {
+                        lineone = '<div>回复了<a post_uid=' + info.parentinfo.userinfo.userid + ' href="javascript:void(0)" class="np-user ' + popClick + '">' + info.parentinfo.userinfo.nick + '</a>的评论<span class="np-text-strong">' + _this.subString(info.parentinfo.content, 46) + '</span></div>'
+
+                    } else {
+                        lineone = '发表评论';
+                    }
+                    var titleHtml = '<a href="' + info.targetinfo.url + '" target = "_blank" class="np-link-weak">' + (info.targetinfo.title ? info.targetinfo.title : ' ') + '</a>';
+                    newstrHTML = '<li class="np-post" id=' + listId + '' + info.id + ' tid=' + info.targetinfo.targetid + '>'
+                        + '<div class="np-post-body">'
+                        + '<div class="np-post-header">'
+                        + '<span class="np-time">' + (info.time ? _this.formatTime(info.time) : "刚刚") + '</span>'
+                        + lineone + '</div>' + '<div class="np-post-content">' + imgHtml + titleHtml + '</div>' + '<div class="np-post-footer">' + '<span class="np-btn-upvote">' + info.up + '</span>' + '<span class="np-btn-reply reply">' + info.repnum + '</span>' + '<span class="np-btn-delete delete" id=delete_' + info.id + '>删除</span>'
+
+                        + '</div>' + '</div>' + '<ul class="children"></ul>' + '</li>'
+
+                }
+                return newstrHTML
+            },
+
+
+
+            loadMyMessage: function() { // 个人中心提醒 列表拉取
+                var _this = this;
+                var o = this.options;
+                var oMyMsg = o.$urlapi;
+                var strHTML = "";
+                var pageNum = o.centerPageSize;
+                var flagfirst = 1;
+                if (o.$urlapi.pageflag == 1) {
+                    pageNum = 20;
+                    flagfirst = 2;
+                }
+                $.ajax({
+                    url: (o.fetchUrl + 'user/' + o.$urlapi.userId + "/msg?msgid=" + o.$urlapi.msgid + "&pageflag=" + o.$urlapi.pageflag + "&reqnum=" + pageNum),
+                    dataType: 'jsonp',
+                    beforeSend: function() {
+
+                        _this._tips0 = new Date().getTime(); //Qoss时间戳
+
+                    },
+                    success: function(data) { //从服务器得到数据，显示数据并继续查询
+
+                        var _tips1 = new Date().getTime(); //Qoss时间戳
+
+                        if (data.errCode == 8) { // 如果登陆态失效
+
+                            _this.showLoginLayer();
+                            return;
+                        }
+
+
+                        if (data.errCode == 0) {
+
+                            if (oMyMsg.pageflag == 0) {
+
+                                oMyMsg.msgid = oMyMsg.first = data.data.first;
+                                oMyMsg.last = data.data.last;
+
+                                $('#my-message-list').html('');
+
+                                if (data.data.retnum < data.data.total && data.data.retnum == 10) {
+
+                                    $('#loadMsgMore').show();
+
+                                }
+
+                                if (data.data.retnum == 0) {
+
+                                    $('#my-message').children('.tipInfo').removeClass('waitting').html('暂无提醒').show();
+
+                                    $('#loadMsgMore').hide();
+                                    return;
+
+                                }
+
+                            }
+                            if (oMyMsg.pageflag == 1) {
+                                oMyMsg.msgid = oMyMsg.last = data.data.last;
+                            }
+
+                            var blueflag = "";
+
+                            if (oMyMsg.pageflag == 2) {
+                                oMyMsg.msgid = oMyMsg.first = data.data.first;
+                                var blueflag = "blueflag";
+                            }
+
+                            var trueList = data.data.message;
+
+                            $.each(trueList, function(index, info) {
+                                strHTML += _this.myCreateHtml(info, "message", blueflag);
+
+                            });
+
+
+                            if (o.$urlapi.pageflag == 1) {
+
+                                $("#my-message-list").append(strHTML);
+                                _this.iframeHeight();
+
+                            } else {
+
+                                $("#my-message-list").prepend(strHTML);
+                                _this.iframeHeight();
+
+                                $("#my-message-list .blueflag").each(function(index, element) { /*20130710 by link*/
+
+                                    _this.blueLine("#" + $(this).attr('id'));
+                                });
+                            }
+
+                            if (flagfirst == 2) {
+                                _this.conHeight(2); //20130805 提醒 by link
+                            }
+
+
+                            _this.iframeHeight();
+
+
+                            if (data.data.retnum < pageNum || data.data.total <= pageNum) {
+
+                                $('#loadMsgMore>span').hide();
+                                $('#loadMsgMore>em').removeClass('np-load-more-loading');
+
+                            } else {
+
+                                $('#loadMsgMore>span').show();
+                                $('#loadMsgMore>em').hide();
+
+                            }
+
+
+                            $('#my-message').children('.tipInfo').hide();
+                            _this.iframeHeight();
+
+                        } else if (data.errCode == 0 && data.data.retnum == 0) {
+
+                            if ($('#my-message-list li').length == 0) {
+                                $('#my-message').children('.tipInfo').removeClass('waitting').html('暂无提醒').show();
+                            } else {
+                                $('#my-message').children('.tipInfo').hide();
+                            }
+
+                        } else {
+                            $('#my-message').children('.tipInfo').removeClass('waitting').html('暂无提醒').show();
+                            $('#loadMsgMore').hide();
+                        }
+
+                        Qoss('wdtx', _this._tips0, {
+                            1: (_this._tips0 + 1),
+                            2: _tips1,
+                            3: _tips1
+                        }, 100);
+                    }
+
+                });
+
+
+
+
+            },
+
+            loadMyComment: function() { // 个人中心 我的评论列表拉取
+
+                var _this = this;
+                var o = this.options;
+                var oMyCmt = o.$urlapi_mycomment;
+                var pageNum = o.centerPageSize;
+                var flagfist = 1;
+                var vip1 = '';
+                var vip2 = '';
+
+                if (o.$urlapi_mycomment.pageflag == 0) {
+                    o.$urlapi_mycomment.last = 0;
+                }
+
+                if (o.$urlapi_mycomment.pageflag == 1) {
+
+                    pageNum = 20;
+                    flagfist = 2;
+
+                }
+
+                $.ajax({
+                    url: o.fetchUrl + 'user/' + o.$urlapi_mycomment.userId + "/comment?lastid=" + o.$urlapi_mycomment.last + "&pageflag=" + o.$urlapi_mycomment.pageflag + "&reqnum=" + pageNum,
+                    dataType: 'jsonp',
+
+                    jsonpCallback: 'myComment',
+
+                    beforeSend: function() {
+
+                        _this._myCom0 = new Date().getTime(); //Qoss时间戳
+
+                    },
+
+                    success: function(data) { //从服务器得到数据，显示数据并继续查询
+
+                        var strHTML = '';
+
+                        if (data.errCode == 8) { // 如果登陆态失效
+
+                            _this.showLoginLayer();
+                            return;
+                        }
+
+                        if (data.errCode == 0) {
+
+                            var _myCom1 = new Date().getTime(); //Qoss时间戳
+                            var area = data.data.usermeta.region.replace(/:/g, ' ');
+
+                            var myarea = ($.trim(area) != '' ? area : '腾讯网友');
+
+                            // 增加好莱坞VIP
+
+                            if (o.huiyuan == 1) { // 是否是视频站
+
+                                if (data.data.usermeta.hwvip == 1) {
+
+                                    $('#myuserInfo').find('span:first').addClass('hyw');
+                                    $('#myuserInfo .hyw a').addClass('huiyuan p' + data.data.usermeta.hwlevel);
+
+                                    if (o.film == 1) {
+
+                                        $('#myuserInfo .hyw a').attr('href', 'http://film.qq.com/vip.html?ptag=film_direct.comment');
+
+                                    }
+                                }
+                            }
+
+                            $('#myuserInfo').find('img').attr('src', data.data.usermeta.head || '');
+                            $('#myuserInfo').find('.np-user').html(data.data.usermeta.nick);
+
+                            $('#myuserInfo').find('.a').html(myarea);
+                            $('#myuserInfo').find('.b').html(data.data.usermeta.upnum);
+                            $('#myuserInfo').find('.c').html(data.data.usermeta.commentnum);
+                            $('#myuserInfo').show();
+
+                            if (o.$urlapi_mycomment.pageflag == 0) {
+                                o.$urlapi_mycomment.msgid = o.$urlapi_mycomment.first = data.data.first;
+                                o.$urlapi_mycomment.last = data.data.last;
+                                $('#my-notification-list').html('');
+                                if (data.data.retnum == 10) {
+                                    $('#loadCmtMore').show();
+                                }
+
+                                if (data.data.retnum == 0) {
+
+                                    $('#my-notification').children('.tipInfo').removeClass('waitting').html('暂无评论').show();
+
+                                    $('#loadCmtMore').hide();
+
+                                    $('#myuserInfo').hide();
+
+                                    _this.iframeHeight();
+
+                                    return;
+
+                                }
+
+                            }
+
+                            /*向下拉旧的*/
+
+                            if (o.$urlapi_mycomment.pageflag == 1) {
+
+                                o.$urlapi_mycomment.last = data.data.last;
+
+                            }
+
+                            /* 向上拉新的
+                             if(o.$urlapi_mycomment.pageflag==2){
+                             o.$urlapi_mycomment.msgid =o.$urlapi_mycomment.first = data.data.first;
+                             }
+                             */
+
+
+
+                            $.each(data.data.comments, function(index, info) {
+                                strHTML += _this.myCreateHtml(info, "myComment");
+                            });
+
+                            $("#my-notification-list").append(strHTML);
+
+                            //if(flagfist == 2){
+
+                            _this.conHeight(2); //20140416 由3改为2 by link
+                            //}
+
+                            _this.iframeHeight();
+
+                            setTimeout(function() {
+                                _this.iframeHeight()
+                            }, 200); // 个人中心延迟处理
+
+
+                            if (data.data.retnum < pageNum || data.data.total <= pageNum) {
+
+                                $('#loadCmtMore>span').hide();
+                                $('#loadCmtMore>em').removeClass('np-load-more-loading');
+
+                            } else {
+
+                                $('#loadCmtMore>span').show();
+                                $('#loadCmtMore>em').hide();
+
+                            }
+
+                            $('#my-notification').children('.tipInfo').hide();
+
+                        } else {
+                            $('#my-notification').children('.tipInfo').removeClass('waitting').html('暂无评论').show();
+
+                            $('#loadCmtMore').hide();
+
+                            if ($('#my-notification-list li').length == 0) {
+                                $('#my-notification').children('.tipInfo').show();
+
+                            }
+                            _this.iframeHeight();
+
+                        }
+                        Qoss('wdpl', _this._myCom0, {
+                            1: (_this._myCom0 + 1),
+                            2: _myCom1,
+                            3: _myCom1
+                        }, 100);
+
+                    }
+
+                });
+            },
+
+
+            clickLoadMore: function() { // 个人中心 loadMore 按钮
+                var _this = this;
+                var o = this.options;
+
+                $('#loadMsgMore>span').click(function() { // 拉取更多提醒
+
+
+                    $('#loadMsgMore>span').hide();
+                    $('#loadMsgMore>em').addClass('np-load-more-loading').show();
+                    o.$urlapi.pageflag = 1; //翻页标志 0:第一页    1: 下一页               2:上一页
+                    o.$urlapi.msgid = o.$urlapi.last; //更新最后列表标记
+                    _this.loadMyMessage();
+                    sendClientStat(curSite, 1, cmt_id, 'clk_notice_more'); //拉取提醒更多
+
+                });
+
+                $('#loadCmtMore>span').click(function() {
+
+                    $('#loadCmtMore>span').hide();
+                    $('#loadCmtMore>em').addClass('np-load-more-loading').show();
+                    o.$urlapi_mycomment.pageflag = 1; //翻页标志 0:第一页 1: 下一页 2:上一页
+                    o.$urlapi_mycomment.msgid = o.$urlapi_mycomment.last; //更新最后列表标记
+                    _this.loadMyComment();
+                    sendClientStat(curSite, 1, cmt_id, 'clk_mycomment_more'); //
+                });
+            },
+
+            creatPostLink: function(info) {
+
+                var o = this.options;
+                // 三个蓝杠
+                return "<a class=\'" + o.popupLink + "\ np-btn' targetid=\'" + info.targetid + "\' commentid=\'" + info.id + "\' parentid=\'" + info.parent + "\' href=\'javascript:void(0)\'><img src='//mat1.gtimg.com/www/niuping2013/postframe/transparent.gif' />查看回复("+(info.rep?info.rep : info.repnum)+")</a>";
+            },
+            initPostFrame: function() {
+                var _this = this;
+                var o = this.options;
+
+                $('#content').delegate('.' + o.popupLink, 'click', function(ev) {
+
+                    var nick = _this.options.$loginFlag.data('nick');
+                    var pic = _this.options.$loginFlag.data('userPic');
+
+                    var target = $(this);
+                    var targetid = target.attr('targetid');
+                    var commentid = target.attr('commentid');
+                    var parentid = target.attr('parentid');
+
+                    //链接后加日期
+
+
+                    //http://www.qq.com/coral/coralBeta3/postframeImg3.1.htm http://news.qq.com/niuping_https/
+
+                    $(top.document.body).append('<iframe src="//news.qq.com/niuping_https/postframeImg3.1.htm?' + new Date().getDate() + '" id="np-pop-iframe" allowtransparency="true" frameborder="0" scrolling="no" style="width: 100%; z-index: 9999; position: fixed; _position:absolute;*+position:fixed;top: 0px; left: 0px; border: none; overflow: hidden; height: 100%;" data-nick="' + nick + '" data-pic="' + pic + '" data-id="' + targetid + '_' + commentid + '" parentid="' + parentid + '"></iframe>');
+
+                });
+            },
+            upLoadchange:function($this){
+
+
+
+                var _this = this;
+                var _status = getUin(); //先获取用户状态
+
+                if ( _status ) { // 如果用户存在
+
+                } else { //未登陆
+
+                    _this.showLoginLayer();
+                    return
+                }
+
+
+                var $picList,id;
+                if($this.closest('.children').length){ // 判断回复评论中的图片上传
+
+                    $this.closest('.children').find('#insertPicList_reply').show();
+
+                    $picList = $this.closest('.children').find('#insertPicList_reply');
+
+                    id = $this.closest('.np-post').attr('id');
+                    setTimeout(function() {
+                        _this.iframeHeight()
+                    }, 600)
+                }else{
+                    $('#insertPicList').show();
+                    $picList = $('#insertPicList');
+                    id = 'np-reply-box';
+                }
+
+                if ($picList.find('img').length >= 4) { // 大于4条提交无用
+                    return
+                }
+                if ($this.val() != '') {
+                    if (!/\.(gif|jpg|jpeg|png)$/i.test($this.val())) {
+                        //alert("图片类型必须是.gif/.jpg/.png");
+                        $picList.find('.insert_piclist').append('<li style="padding-top:20px;color:red" class="upImgInfo">图片类型必须是.gif/.jpg/.png</li>');
+                        setTimeout(function() {
+                            $picList.find('.upImgInfo').fadeOut().remove();
+                        }, 3000)
+                        $this.val('');
+                        return false;
+                    }
+                    $this.parent().find('input[name=g_tk]').val(generateToken(getKey())); // 获取uin
+                    $this.parent().find('input[name=thrdes]').val(id);
+
+                    $this.parent().submit(); // 提交表单
+                    $this.val(''); // 清空文本域，可以上传同一张图片多次
+                    // $("#form10 input[name=g_tk]").val(generateToken(getKey())); //获取uin
+                    // $("#form10").submit();
+                    $picList.find('.add_pic').unbind().html('').addClass('icon_loading_pic');
+                    clearTimeout(upLoadImgError)
+                    upLoadImgError = setTimeout(function(){
+
+                        if ($picList.find('.add_pic').text() != '+') { //2000个字符，中文字算1个字符
+                            //topicDialog('图片上传失败，请重试', 'warning');
+
+                            $picList.find('.insert_piclist').append('<li style="padding-top:20px;color:#f30"  class="upImgInfo">出错了！图片必须是小于5M的.gif/.jpg/.png</li>');
+                            setTimeout(function() {
+                                $picList.find('.upImgInfo').fadeOut().remove();
+                            }, 3000)
+                        }
+                        $picList.find('.add_pic').removeClass('icon_loading_pic');
+                        $picList.find('.add_pic').html('<i class="add">+</i>');
+
+                    }, 20000)
+                }
+
+                _this.iframeHeight();
+            },
+            upLoadImg: function() {
+                //上传图片事件
+                // $body.delegate('#picture', 'click', function() {
+                //     if ($('.insert_piclist img').length >= 4) {
+                //         alert('只能上传4张图片！')
+                //         return false;
+                //     }
+                // })
+                // //图片上传中，清除文本域的点击事件
+                // $body.delegate('#picture', 'click change', function() {
+                //     if ($('#upAddPic .add_pic').text() != '+') {
+                //         return false
+                //     }
+                // })
+                var _this = this;
+                var o = this.options;
+
+                $body.delegate('.upimgbox','mouseenter',function(){
+                    jQuery(this).find('.iconbtn').fadeIn();
+                })
+                $body.delegate('.upimgbox','mouseleave',function(){
+                    jQuery(this).find('.iconbtn').fadeOut();
+                })
+
+
+                $body.delegate('.imgRemove','click',function(){
+                    if(jQuery(this).closest('.insert_piclist').find('img').length <= 4){
+                        jQuery(this).closest('.insert_piclist').find('.upAddPic').show();
+
+                    }
+                    if(jQuery(this).closest('.children').length){
+                        jQuery(this).closest('.children').find('.sybol_pic').show();
+                    }else if(jQuery(this).closest('#commentArea').length){
+                        jQuery(this).closest('#commentArea').find('.sybol_pic').show();
+                    }
+                    jQuery(this).closest('li').remove();
+                })
+
+                //图片的左右移动
+                $body.delegate('.imgLeft','click',function(){
+                    var cur = jQuery(this).parent();//从span向上寻找到tr
+                    var pre=cur.prev('li');//获取前一行索引
+                    if(pre.length !=0){
+                        cur.insertBefore(pre);//插入前一行的位置
+                    }
+                })
+
+                $body.delegate('.imgRight','click',function(){
+                    var cur = jQuery(this).parent();
+                    var nex=cur.next('li:not(.upAddPic)'); //获取后一行索引
+                    if(nex.length !=0){
+                        cur.insertAfter(nex);//插入后一行的位置
+                    }
+                })
+                // //监测input：file文件改变事件
+                // $('body').delegate('#picture', 'change', function() {
+
+                //     jQuery('#insertPicList').show();
+
+                //     if (this.value != '') {
+                //         if (!/\.(gif|jpg|jpeg|png)$/i.test(this.value)) {
+                //             //alert("图片类型必须是.gif/.jpg/.png");
+                //             jQuery('.insert_piclist').append('<li style="padding-top:20px;color:red" id="upImgInfo">图片类型必须是.gif/.jpg/.png</li>');
+                //             setTimeout(function() {
+                //                 jQuery('#upImgInfo').fadeOut().remove();
+                //             }, 3000)
+                //             this.value = "";
+                //             return false;
+                //         }
+                //         $(this).parent().find('input[name=g_tk]').val(generateToken(getKey()))
+                //         $(this).parent().submit();
+                //         // $("#form10 input[name=g_tk]").val(generateToken(getKey())); //获取uin
+                //         // $("#form10").submit();
+                //         $('#upAddPic .add_pic').unbind().html('').addClass('icon_loading_pic');
+
+                //         setTimeout(function() {
+
+                //             if ($('#upAddPic .add_pic').text() != '+') { //2000个字符，中文字算1个字符
+                //                 topicDialog('图片上传失败，请重试', 'warning');
+                //             }
+                //             $('#upAddPic .add_pic').html('<i class="add">+</i>');
+
+                //         }, 20000)
+                //     }
+
+                // })
+
+                // 登录失效时操作
+                $('body').delegate('.add_file', 'click', function() {
+                    var _status = getUin(); //先获取用户状态
+
+                    if ( _status ) { // 如果用户存在
+
+                    } else { //未登陆
+
+                        _this.showLoginLayer();
+                        return false
+                    }
+
+                    var $picList,id;
+                    if($(this).closest('.children').length){ // 判断回复评论中的图片上传
+
+                        // $picList = $(this).closest('.children').find('#insertPicList_reply');
+                        id = "insertPicList_reply"
+                    }else{
+
+                        //$picList = $('#insertPicList');
+                        id = "insertPicList"
+                    }
+
+                    if(_this.isUpImg(id)){
+                        return false
+                    }
+                    // if($picList.find('.add_pic').text() != '+'){
+                    //     if(!$picList.find('.insert_piclist .upImgInfo').length){
+                    //         $picList.find('.insert_piclist').append('<li style="padding-top:20px;color:red" class="upImgInfo">图片正在上传中！</li>');
+                    //     }
+
+                    //     setTimeout(function() {
+                    //         $picList.find('.upImgInfo').fadeOut().remove();
+                    //     }, 3000)
+                    //     this.value = "";
+                    //     return false;
+                    // }
+
+                })
+                //监测input：file文件改变事件
+
+                $('.add_file').on('change',function() {
+                    //     alert(333)
+                    // })
+
+                    // $('body').delegate('.add_file', 'change', function() {
+
+                    _this.upLoadchange($(this))
+
+                })
+            }
+
+        }
+        coralComment._create()
+        //});
+
+        //$doc.comment(); //初始化插件
+
+    })(jQuery);
+
+
+})
+
+
+
+
+/*********************************************插件外公共方法 - 后期整理出去****************************************************/
+
+/**
+ * 统计“真实字符长度”的方法，用于微博的字数统计，一个汉字算2个长度
+ */
+
+String.prototype.realLength = function() {
+    return this.replace(/[^\x00-\xff]/g, "**").length; // [^\x00-\xff] - 匹配非双字节的字符
+
+};
+
+
+
+//顶部发表评论的回调
+function topCallback(data) {
+    //jQuery(document).comment('pubCallback', 'top', data, new Date().getTime());
+    coralComment.pubCallback('top', data, new Date().getTime());
+    // $('#insertPicList .upimgbox').remove();
+    // $('#insertPicList').hide();
+    jQuery('#commentArea .sybol_pic').show();
+    jQuery('#commentArea .upAddPic').show();
+
+}
+
+
+//弹出框发表评论的回调
+
+function popCallback(data) {
+
+    //jQuery(document).comment('pubCallback', 'pop', data, new Date().getTime());
+    coralComment.pubCallback('pop', data, new Date().getTime());
+
+    //jQuery('#public_reply .sybol_pic').show();
+    //jQuery('#public_reply .upAddPic').show();
+}
+
+
+//举报成功的回调
+
+function reportCallback(data) {
+
+    //jQuery(document).comment('pubCallback', 'report', data, new Date().getTime());
+    coralComment.pubCallback('report', data, new Date().getTime())
+}
+
+//删帖成功的回调
+
+function deleteCallback(data) {
+
+    //jQuery(document).comment('pubCallback', 'delete', data, new Date().getTime());
+    coralComment.pubCallback('delete', data, new Date().getTime())
+}
+
+
+function getUin() {
+
+    var cookieUin = '';
+    if (jQuery.cookie('uin')) {
+
+        cookieUin = jQuery.cookie('uin');
+
+        var matchResult = cookieUin.match(/[1-9][0-9]*/);
+
+        if (matchResult instanceof Array) {
+
+            return cookieUin.match(/[1-9][0-9]*/)[0];
+        }
+
+    } else {
+
+        cookieUin = jQuery.cookie('luin');
+        return cookieUin
+    }
+
+}
+
+function getKey() {
+    return jQuery.cookie('skey') || jQuery.cookie('lskey');
+}
+
+function generateToken(key) {
+    var hash = 2013;
+
+    if (key) {
+
+        for (var i = 0, len = key.length; i < len; i++) {
+            hash += (hash << 5) + key.charCodeAt(i);
+        }
+
+    }
+
+
+    return hash & 0x7fffffff;
+}
+
+
+
+/****
+
+ iframe 用------------------登陆成功回调 uin/ qq号 nici/名字 headUrl/头像地址
+
+ ****/
+
+
+
+
+function publicLoginEvent() { // 登陆事件
+
+
+    if (parent.registerCoralEvent && parent.registerCoralEvent.loginEvent) {
+
+        parent.registerCoralEvent.loginEvent();
+    } else {
+
+        if(jQuery(parent.document.getElementById('oneKey')).length != 0){
+            jQuery(parent.document.getElementById('oneKey')).click();
+        }else{
+            jQuery(parent.document.getElementById('onekey')).click();
+        }
+
+    }
+
+}
+
+function publicLogined(uin, nick, headUrl) { // 20130716 登陆成功回调
+
+    if (uin) {
+        //jQuery(document).comment('onLogined', uin, nick, headUrl);
+        coralComment.onLogined(uin, nick, headUrl)
+        if (top.document.getElementById('np-pop-iframe')) {
+            top.document.getElementById('np-pop-iframe').contentWindow.publicLogined(uin, nick, headUrl);
+        }
+    }
+
+}
+
+
+function publicLogout() { // 20130716 退出回调
+    //jQuery(document).comment('loginOut');
+    coralComment.loginOut()
+}
+
+
+
+/**
+ * Qos测速函数。
+ * @param _name: 测试接口名，最终组合为 tcomment + _name
+ * @param _baseTimestamp: 基准时间戳
+ * @param _timestamps: 各参数时间戳对象，e.g. {1: newDate().getTime(), 2: 1350881412511}，1 和 2为Qos接口查询参数名
+ */
+function Qoss(_name, _baseTimestamp, _timestamps, _randomRange) {
+
+
+    //随机采样
+    /*
+     if(_randomRange) {
+     var _lucky = parseInt(Math.random() * _randomRange);
+     if (_lucky) {
+     return;
+     }
+     }
+     */
+
+    for (var _idx in _timestamps) {
+        _timestamps[_idx] -= _baseTimestamp;
+    }
+
+    jQuery('<img src="//qos.report.qq.com/collect?type=1&name=coral_qq_com_' + _name + '&' + jQuery.param(_timestamps) + '">')
+        .error(function() {
+            jQuery(this).remove();
+        })
+        .load(function() {
+            jQuery(this).remove();
+        })
+        .appendTo('body');
+
+
+}
+
+
+function errorImg (img){
+    var defaultHeadPic = '//mat1.gtimg.com/www/coral2.0/images/g.gif';
+    img.src = defaultHeadPic;
+    img.onerror = null;
+
+}
+
+
+
+
+
+/**
+ * PGV 统计函数
+ * @param _domain: 统计域，默认为 location.host
+ * @param _path: 要统计的URL, 可以为空。 e.g. "/foo/bar.html"
+
+ function PgvCount(_domain, _path) {
+    pvDoc = document;
+    pvLoc = location;
+    pvRepeatCount = 1;
+    pvCurDomain = _domain || location.host;
+    if(_path) {
+        pvCurUrl = _path;
+    }
+    if(typeof pgvMain == 'function') {
+        pgvMain();
+    } else {
+        jQuery.getScript('http://pingjs.qq.com/ping.js', function() {
+            typeof pgvMain == 'function' && PgvCount(_domain, _path);
+        });
+    }
+}
+ */
+
+/**
+
+ * BOSS平台上报函数
+ * 用于发送指定接口的统计数据
+ * cursite 当前所属频道页面 ，classType 业务类型：1 是boss 2是PGV，opType 操作类型: 1 是评论页 2 是文章底层， iStatus 操作结果
+
+ */
+
+
+function sendClientStat(site, classType, iTargetid, opType, iStatus) {
+
+    var newsUrl = location.protocol + '//' + location.host + location.pathname;
+    var iFlow = parseInt(Math.random() * 1000000000),
+        iQQ = getUin() || '',
+        iUid = jQuery.cookie('uid'); // 公共参数
+    var urlAll = newsUrl;
+    var mainLost = encodeURIComponent(location.host);
+
+    if (site == 'coral') { // boss 上报
+
+        if (classType == 1) {
+            var iTy = 1836,
+                biz = 'coral.web.comment_detail.action';
+        } else {
+            var iTy = 1837,
+                biz = 'coral.web.comment_detail.pgv';
+        }
+
+    } else {
+        if (classType == 1) {
+            var iTy = 1836,
+                biz = 'coral.web.article_detail.action';
+        } else {
+            var iTy = 1837,
+                biz = 'coral.web.article_detail.pgv';
+        }
+
+    }
+
+    iStatus = iStatus || 0;
+    g_btrace_BOSS = new Image(1, 1);
+    g_btrace_BOSS.src = "//btrace.qq.com/collect?sIp=0&iQQ=" + iQQ + "&sBiz=" + biz + "&sOp=" + opType + "&iSta=" + iStatus + "&iTy=" + iTy + "&iFlow=" + iFlow + "&isite=" + site + "&iTargetid=" + iTargetid + "&iuid=" + iUid + "&iUrl=" + urlAll + "&idomain=" + mainLost;
+
+}
+
+//上传图片回调 by link 20140120
+function upLoadImg(data) {
+    clearTimeout(upLoadImgError); // 清除20秒提示错误
+    //change start 2015.10.29 v_xilixu
+    //var $boxid = jQuery('#'+data.data.thrdes);    //data返回值非零的时候没有data.data
+    var $boxid="";
+    if(data.data && data.data.thrdes){
+        $boxid=jQuery("#" + data.data.thrdes);
+    }else{
+        $boxid=jQuery("#np-reply-box");
+    }
+    //change end  2015.10.29 v_xilixu
+    if (data.errCode == 0) {
+        $boxid.find('.insert_piclist').data('dataImg', data.data.picture); //存储图片信息
+        var html = '<li class="list_item upimgbox">'
+            + '<img width=44 height=44 data=\'{"url":"' + data.data.picture[0].url + '","width":' + data.data.picture[0].width + ',"height":' + data.data.picture[0].height + '}\' src="'
+            + data.data.picture[0].url + '/100" alt="图片">'
+            + '<b class="iconbtn imgRemove" style="">x</b>'
+            + '<b class="iconbtn imgLeft"  style="">←</b>'
+            + '<b class="iconbtn imgRight" style="">→</b>'
+            + '</li>'
+        $boxid.find('.upAddPic').before(html);
+    } else if (data.errCode == 26 || data.errCode == 27) { //图片大于5M
+        jQuery('#np-reply-box .add_pic').html('+').removeClass('icon_loading_pic');
+        $boxid.find('.insert_piclist').append('<li style="padding-top:20px; color:red" class="upImgInfo">出错了，图片必须是小于5M的.gif/.jpg/.png</li>');   //图片不能大于5M！
+        setTimeout(function() {
+            $boxid.find('.upImgInfo').fadeOut().remove();
+        }, 3000)
+    } else {
+        jQuery('#np-reply-box .add_pic').html('+').removeClass('icon_loading_pic');
+        $boxid.find('.insert_piclist').append('<li style="padding-top:20px; color:red" class="upImgInfo">上传出错！</li>');
+        setTimeout(function() {
+            $boxid.find('.upImgInfo').fadeOut().remove();
+        }, 3000)
+    }
+    if(data.data.thrdes){
+        jQuery('#'+data.data.thrdes+' .add_pic').html('+').removeClass('icon_loading_pic');
+        // 隐藏上传图片按钮
+        if (jQuery('#'+data.data.thrdes+' .insert_piclist img').length >= 4) {
+            jQuery('#'+data.data.thrdes+' .upAddPic').hide();
+            jQuery('#'+data.data.thrdes+' .sybol_pic').hide()
+        }
+    }
+    //coralComment.iframeHeight();
+}
+/*  |xGv00|b64654cc7384d0a7538b7c02867d5311 */

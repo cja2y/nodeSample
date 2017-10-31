@@ -1,0 +1,13 @@
+<option value="" selected="true" disabled="true">请选择描述</option>
+<option value='2'>铝合金污染</option>
+<option value='3'>铝合金划伤</option>
+<option value='4'>推拉门下滑严重损坏</option>
+<option value='5'>开闭不畅</option>
+<option value='6'>五金件缺失／损坏</option>
+<option value='7'>玻璃划伤</option>
+<option value='8'>玻璃污染</option>
+<option value='9'>推拉门阳台收口打胶粗糙</option>
+<option value='10'>漆面色差</option>
+<option value='11'>窗框变形</option>
+<option value='12'>锁具故障</option>
+<option value='13'>其他</option>

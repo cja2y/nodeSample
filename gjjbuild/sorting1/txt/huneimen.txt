@@ -1,0 +1,16 @@
+<option value="" selected="true" disabled="true">请选择描述</option>
+<option value='2'>划伤、掉漆</option>
+<option value='3'>破损、油漆起皮</option>
+<option value='4'>门套线离墙缝隙过宽</option>
+<option value='5'>门套线拼缝不齐</option>
+<option value='6'>门套大小头（过宽、过窄）</option>
+<option value='7'>开关异响／不畅</option>
+<option value='8'>五金损坏划伤</option>
+<option value='9'>门套线松动</option>
+<option value='10'>门贴脸底部与地缝隙大</option>
+<option value='11'>梦吸松动或失效</option>
+<option value='12'>门锁故障</option>
+<option value='13'>把手松动</option>
+<option value='14'>门贴脸变形（弯曲等）</option>
+<option value='15'>卫生间门贴脸与门脚石高低差</option>
+<option value='16'>其他</option>

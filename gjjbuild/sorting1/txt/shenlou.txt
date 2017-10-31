@@ -1,0 +1,6 @@
+<option value="" selected="true" disabled="true">请选择描述</option>
+<option value='2'>外墙渗漏</option>
+<option value='3'>管道渗漏（上下水管）</option>
+<option value='4'>内墙渗漏（如卫生间等）</option>
+<option value='5'>吊漏渗漏</option>
+<option value='6'>其他土建类渗漏（请在补充说明中填写）</option>

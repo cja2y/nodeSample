@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <title>单选框/复选框美化</title>
+    <script src="source/jquery-1.8.3.min.js"></script>
+    <script src="source/jquery-labelauty.js"></script>
+    <link rel="stylesheet" type="text/css" href="source/styles.css">
+    <link rel="stylesheet" type="text/css" href="source/jquery-labelauty.css">
+</head>
+<body>
+<section>
+    <h3 class="title">默认</h3>
+    <h3>您喜欢的职业（单选）</h3>
+    <ul class="dk-setText">
+        <li><input type="radio" name="radio" data-labelauty="安卓工程师"></li>
+        <li><input type="radio" name="radio" data-labelauty="iOS工程师"></li>
+        <li><input type="radio" name="radio" data-labelauty="前端工程师"></li>
+        <li><input type="radio" name="radio" data-labelauty="后台工程师"></li>
+        <li><input type="radio" name="radio" disabled data-labelauty="不可用"></li>
+    </ul>
+    <h3>您擅长的技能（复选框）</h3>
+    <ul class="dk-setText">
+        <li><input type="checkbox" name="checkbox" disabled checked data-labelauty="HTML5"></li>
+        <li><input type="checkbox" name="checkbox" data-labelauty="CSS3"></li>
+        <li><input type="checkbox" name="checkbox" data-labelauty="JavaScript"></li>
+        <li><input type="checkbox" name="checkbox" data-labelauty="jquery"></li>
+        <li><input type="checkbox" name="checkbox" data-labelauty="vue.js"></li>
+        <li><input type="checkbox" name="checkbox" data-labelauty="node.js"></li>
+        <li><input type="checkbox" name="checkbox" data-labelauty="angular.js"></li>
+    </ul>
+</section>
+<script>
+    $(function(){
+        $('.dk-setText input').labelauty();
+    });
+    //获取选中input的值
+    var $value  = $('input[name="room_type"]:checked').val();
+</script>
+<section>
+    <h3 class="title">只需要图标变化，不需要文本(图标不喜欢，可以直接更换图片）</h3>
+    <h3>您喜欢的职业（单选）</h3>
+    <ul class="dk-setLabel">
+        <li><input type="radio" name="radio" data-labelauty="安卓工程师"></li>
+        <li><input type="radio" name="radio" data-labelauty="iOS工程师"></li>
+        <li><input type="radio" name="radio" data-labelauty="前端工程师"></li>
+        <li><input type="radio" name="radio" data-labelauty="后台工程师"></li>
+        <li><input type="radio" name="radio" disabled data-labelauty="不可用"></li>
+    </ul>
+    <h3>您擅长的技能（复选框）</h3>
+    <ul class="dk-setLabel">
+        <li><input type="checkbox" name="checkbox" disabled checked data-labelauty="HTML5"></li>
+        <li><input type="checkbox" name="checkbox" data-labelauty="CSS3"></li>
+        <li><input type="checkbox" name="checkbox" data-labelauty="JavaScript"></li>
+        <li><input type="checkbox" name="checkbox" data-labelauty="jquery"></li>
+        <li><input type="checkbox" name="checkbox" data-labelauty="vue.js"></li>
+        <li><input type="checkbox" name="checkbox" data-labelauty="node.js"></li>
+        <li><input type="checkbox" name="checkbox" data-labelauty="angular.js"></li>
+    </ul>
+</section>
+<script>
+    $(function(){
+        $('.dk-setLabel input').labelauty({ label: false });
+    });
+    //获取选中input的值
+    var $value  = $('input[name="room_type"]:checked').val();
+</script>
+<section>
+    <h3 class="title">只需要文本变化，不需要图标</h3>
+    <h3>您喜欢的职业（单选）</h3>
+    <ul class="dk-setIcon">
+        <li><input type="radio" name="radio" data-labelauty="安卓工程师"></li>
+        <li><input type="radio" name="radio" data-labelauty="iOS工程师"></li>
+        <li><input type="radio" name="radio" data-labelauty="前端工程师"></li>
+        <li><input type="radio" name="radio" data-labelauty="后台工程师"></li>
+        <li><input type="radio" name="radio" disabled data-labelauty="不可用"></li>
+    </ul>
+    <h3>您擅长的技能（复选框）</h3>
+    <ul class="dk-setIcon">
+        <li><input type="checkbox" name="checkbox" disabled checked data-labelauty="HTML5"></li>
+        <li><input type="checkbox" name="checkbox" data-labelauty="CSS3"></li>
+        <li><input type="checkbox" name="checkbox" data-labelauty="JavaScript"></li>
+        <li><input type="checkbox" name="checkbox" data-labelauty="jquery"></li>
+        <li><input type="checkbox" name="checkbox" data-labelauty="vue.js"></li>
+        <li><input type="checkbox" name="checkbox" data-labelauty="node.js"></li>
+        <li><input type="checkbox" name="checkbox" data-labelauty="angular.js"></li>
+    </ul>
+</section>
+<script>
+    $(function(){
+        $(".dk-setIcon input").labelauty({ icon: false });
+    });
+    //获取选中input的值
+    var $value  = $('input[name="room_type"]:checked').val();
+</script>
+<section>
+    <h3 class="title">改变自定义标签之间的分隔符,data-labelauty属性。选择分隔符分隔符</h3>
+    <h3>您喜欢的职业（单选）</h3>
+    <ul class="dk-separator">
+        <li><input type="radio" name="radio" data-labelauty="安卓工程师-不是安卓工程师"></li>
+        <li><input type="radio" name="radio" data-labelauty="iOS工程师-不是iOS工程师"></li>
+        <li><input type="radio" name="radio" data-labelauty="前端工程师-不是前端工程师"></li>
+        <li><input type="radio" name="radio" data-labelauty="后台工程师-不是后台工程师"></li>
+        <li><input type="radio" name="radio" disabled data-labelauty="不可用"></li>
+    </ul>
+    <h3>您擅长的技能（复选框）</h3>
+    <ul class="dk-separator">
+        <li><input type="checkbox" name="checkbox" disabled checked data-labelauty="HTML5"></li>
+        <li><input type="checkbox" name="checkbox" data-labelauty="CSS3"></li>
+        <li><input type="checkbox" name="checkbox" data-labelauty="JavaScript"></li>
+        <li><input type="checkbox" name="checkbox" data-labelauty="jquery"></li>
+        <li><input type="checkbox" name="checkbox" data-labelauty="vue.js"></li>
+        <li><input type="checkbox" name="checkbox" data-labelauty="node.js"></li>
+        <li><input type="checkbox" name="checkbox" data-labelauty="angular.js"></li>
+    </ul>
+</section>
+<script>
+    $(function(){
+        $(".dk-separator input").labelauty({ separator: "-" });
+    });
+    //获取选中input的值
+    var $value  = $('input[name="room_type"]:checked').val();
+</script>
+<section>
+    <h3 class="title">生成随机ID</h3>
+    <h3>您喜欢的职业（单选）</h3>
+    <ul class="dk-setId">
+        <li><input type="radio" name="radio" data-labelauty="安卓工程师|不是安卓工程师"></li>
+        <li><input type="radio" name="radio" data-labelauty="iOS工程师|不是iOS工程师"></li>
+        <li><input type="radio" name="radio" data-labelauty="前端工程师|不是前端工程师"></li>
+        <li><input type="radio" name="radio" data-labelauty="后台工程师|不是后台工程师"></li>
+        <li><input type="radio" name="radio" disabled data-labelauty="不可用"></li>
+    </ul>
+    <h3>您擅长的技能（复选框）</h3>
+    <ul class="dk-setId">
+        <li><input type="checkbox" name="checkbox" disabled checked data-labelauty="HTML5"></li>
+        <li><input type="checkbox" name="checkbox" data-labelauty="CSS3"></li>
+        <li><input type="checkbox" name="checkbox" data-labelauty="JavaScript"></li>
+        <li><input type="checkbox" name="checkbox" data-labelauty="jquery"></li>
+        <li><input type="checkbox" name="checkbox" data-labelauty="vue.js"></li>
+        <li><input type="checkbox" name="checkbox" data-labelauty="node.js"></li>
+        <li><input type="checkbox" name="checkbox" data-labelauty="angular.js"></li>
+    </ul>
+</section>
+<script>
+    $(function(){
+        $(".dk-setId input").labelauty({ force_random_id: true});
+    });
+    //获取选中input的值
+    var $value  = $('input[name="room_type"]:checked').val();
+</script>
+<section>
+    <h3 class="title">定制默认的标签</h3>
+    <h3>您喜欢的职业（单选）</h3>
+    <ul class="dk-setDelabel">
+        <li><input type="radio" name="radio" data-labelauty=""></li>
+        <li><input type="radio" name="radio" data-labelauty=""></li>
+        <li><input type="radio" name="radio" data-labelauty=""></li>
+        <li><input type="radio" name="radio" data-labelauty=""></li>
+        <li><input type="radio" name="radio" disabled data-labelauty="不可用"></li>
+    </ul>
+    <h3>您擅长的技能（复选框）</h3>
+    <ul class="dk-setDelabel">
+        <li><input type="checkbox" name="checkbox" disabled checked data-labelauty="HTML5"></li>
+        <li><input type="checkbox" name="checkbox" data-labelauty="CSS3"></li>
+        <li><input type="checkbox" name="checkbox" data-labelauty="JavaScript"></li>
+        <li><input type="checkbox" name="checkbox" data-labelauty="jquery"></li>
+        <li><input type="checkbox" name="checkbox" data-labelauty="vue.js"></li>
+        <li><input type="checkbox" name="checkbox" data-labelauty="node.js"></li>
+        <li><input type="checkbox" name="checkbox" data-labelauty="angular.js"></li>
+    </ul>
+</section>
+<script>
+    $(function(){
+        $(".dk-setDelabel input").labelauty({
+            checked_label: "你选择了它",
+            unchecked_label: "我不想要它"
+        });
+    });
+    //获取选中input的值
+    var $value  = $('input[name="room_type"]:checked').val();
+</script>
+<section>
+    <h3 class="title">自定义标签具有不同数量的字符或宽度，可以将最小宽度设置为自定义CSS选择</h3>
+    <h3>您喜欢的职业（单选）</h3>
+    <ul class="dk-minimum">
+        <li><input type="radio" name="radio" data-labelauty="安卓工程师"></li>
+        <li><input type="radio" name="radio" data-labelauty="iOS工程师"></li>
+        <li><input type="radio" name="radio" data-labelauty="前端工程师"></li>
+        <li><input type="radio" name="radio" data-labelauty="后台工程师"></li>
+        <li><input type="radio" name="radio" disabled data-labelauty="不可用"></li>
+    </ul>
+    <h3>您擅长的技能（复选框）</h3>
+    <ul class="dk-minimum">
+        <li><input type="checkbox" name="checkbox" disabled checked data-labelauty="HTML5"></li>
+        <li><input type="checkbox" name="checkbox" data-labelauty="CSS3"></li>
+        <li><input type="checkbox" name="checkbox" data-labelauty="JavaScript"></li>
+        <li><input type="checkbox" name="checkbox" data-labelauty="jquery"></li>
+        <li><input type="checkbox" name="checkbox" data-labelauty="vue.js"></li>
+        <li><input type="checkbox" name="checkbox" data-labelauty="node.js"></li>
+        <li><input type="checkbox" name="checkbox" data-labelauty="angular.js"></li>
+    </ul>
+</section>
+<script>
+    $(function(){
+        $(".dk-minimum input").labelauty({ minimum_width: "40px" });
+    });
+    //获取选中input的值
+    var $value  = $('input[name="room_type"]:checked').val();
+</script>
+<section>
+    <h3 class="title">设置标签相同的宽度</h3>
+    <h3>您喜欢的职业（单选）</h3>
+    <ul class="dk-same">
+        <li><input type="radio" name="radio" data-labelauty="安卓工程师"></li>
+        <li><input type="radio" name="radio" data-labelauty="iOS工程师"></li>
+        <li><input type="radio" name="radio" data-labelauty="前端工程师"></li>
+        <li><input type="radio" name="radio" data-labelauty="后台工程师"></li>
+        <li><input type="radio" name="radio" disabled data-labelauty="不可用"></li>
+    </ul>
+    <h3>您擅长的技能（复选框）</h3>
+    <ul class="dk-same">
+        <li><input type="checkbox" name="checkbox" disabled checked data-labelauty="HTML5"></li>
+        <li><input type="checkbox" name="checkbox" data-labelauty="CSS3"></li>
+        <li><input type="checkbox" name="checkbox" data-labelauty="JavaScript"></li>
+        <li><input type="checkbox" name="checkbox" data-labelauty="jquery"></li>
+        <li><input type="checkbox" name="checkbox" data-labelauty="vue.js"></li>
+        <li><input type="checkbox" name="checkbox" data-labelauty="node.js"></li>
+        <li><input type="checkbox" name="checkbox" data-labelauty="angular.js"></li>
+    </ul>
+</section>
+<script>
+    $(function(){
+        $(".dk-same input").labelauty({ same_width: true });
+    });
+    //获取选中input的值
+    var $value  = $('input[name="room_type"]:checked').val();
+</script>
+</body>
+</html>

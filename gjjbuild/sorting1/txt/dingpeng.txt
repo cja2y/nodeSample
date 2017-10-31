@@ -1,0 +1,8 @@
+<option value="" selected="true" disabled="true">请选择描述</option>
+<option value='2'>涂料波浪起伏</option>
+<option value='3'>涂料色差</option>
+<option value='4'>涂料污染</option>
+<option value='5'>出现锈斑</option>
+<option value='6'>缝隙</option>
+<option value='7'>水印</option>
+<option value='8'>其他</option>

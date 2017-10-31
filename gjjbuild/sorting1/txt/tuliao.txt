@@ -1,0 +1,18 @@
+<option value="" selected="true" disabled="true">请选择描述</option>
+<option value='2'>阴阳交线不顺畅</option>
+<option value='3'>涂料表面波浪起伏</option>
+<option value='4'>表面开裂</option>
+<option value='5'>阳角破损</option>
+<option value='6'>色差</option>
+<option value='7'>流坠</option>
+<option value='8'>返碱</option>
+<option value='9'>返损</option>
+<option value='10'>返潮发霉</option>
+<option value='11'>破皮</option>
+<option value='12'>分色线不均、咬舌</option>
+<option value='13'>透底</option>
+<option value='14'>砂眼</option>
+<option value='15'>锈迹</option>
+<option value='16'>腻子未打磨</option>
+<option value='17'>刷痕明显</option>
+<option value='18'>其他</option>

@@ -1,0 +1,9 @@
+<option value="" selected="true" disabled="true">请选择描述</option>
+<option value='2'>框体版／门板表面划伤、污染</option>
+<option value='3'>框内隔板安装不平、不牢固</option>
+<option value='4'>框门高低差（执手未对其</option>
+<option value='5'>快关异响（门板关闭碰撞）</option>
+<option value='6'>框体五金件缺失</option>
+<option value='7'>框体五金件划伤、损坏、松动（执手、龙头、铰链、阻尼器等）</option>
+<option value='8'>抽屉推拉异常</option>
+<option value='9'>其他</option>

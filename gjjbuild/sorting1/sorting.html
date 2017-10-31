@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>sorting</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="css/main.css" />
+    <link rel="stylesheet" type="text/css" href="css/reset.css" />
+    <script src="js/jquery-1.11.1.js"></script>
+    <script>
+        $(document).ready(function(){
+
+            $(".cascade_drop_down").change(
+                    function () {
+                        var name = $(this).attr("name") + "_next";
+                        var next = $("#" + name).val();
+                        if (next == null || next == '') {
+                            return;
+                        }
+
+                        $("#" + next).empty();
+                        $.ajax({
+                            type:'get',
+                            url: 'txt/'+$(this).val()+'.txt',
+                            data:'name=' + name + '&val=' + $(this).val(),
+                            dataType:'text',
+                            success:function(msg){
+                                ops = msg.split("\n");
+                                for (i = 0; i < ops.length; i++) {
+                                    $("#" + next).append(ops[i]);
+                                }
+                            },
+                            error:function(){
+                                alert("没有找到对应的数据～");
+                            }
+                        });
+                    }
+            )
+
+        });
+    </script>
+</head>
+
+<body>
+
+<div class="demo">
+    <!--两级级联下拉-->
+    <h3>两级级联下拉</h3><br/>
+    <!--一级-->
+    <label for="checkItem">检查项</label>
+    <input type="hidden" id="checkItem_next" name="checkItem_next" value="depict">
+    <input type="hidden" id="depict_next" name="depict_next" value="">
+    <select id="checkItem" name="checkItem" class="cascade_drop_down">
+        <option value="" selected="true" disabled="true">请选择检查项</option>
+        <option value="chazuo">插座</option>
+        <option value="chuantaishi">窗台石</option>
+        <option value="diban">地板</option>
+        <option value="dilou">地漏</option>
+        <option value="dingpeng">顶棚</option>
+        <option value="guandao">管道（非燃气管道）</option>
+        <option value="huneimen">户内门（门扇、门套、门框）</option>
+        <option value="huneiqingjie">户内清洁</option>
+        <option value="kaiguanmianban">开关/面板</option>
+        <option value="kongtiaokong">空调孔</option>
+        <option value="langan">栏杆</option>
+        <option value="lvhejin">铝合金/塑钢门窗</option>
+        <option value="menkanshi">门槛石</option>
+        <option value="shenlou">渗漏（土建类）</option>
+        <option value="tijiaoxian">踢脚线</option>
+        <option value="tuliao">涂料</option>
+        <option value="yigui">衣柜</option>
+        <option value="zhaoming">照明</option>
+    </select>
+    <!--二级-->
+    <label for="depict">描述</label>
+    <select id="depict" name="depict" class="cascade_drop_down">
+        <option value="" selected="true" disabled="true">请选择描述</option>
+    </select>
+
+</div>
+
+<!--多个级联，只需增加两行，如下-->
+<div class="demo">
+    <h3>多个级联，只需增加两行，如下</h3>
+    <p>全部选择第一项才有数据哦～</p>
+    <input type="hidden" id="brand_next" name="brand_next" value="category">
+    <input type="hidden" id="category_next" name="category_next" value="type">
+    <input type="hidden" id="type_next" name="type_next" value="series">
+    <input type="hidden" id="series_next" name="series_next" value="">
+
+    <select id="brand" name="brand" class="cascade_drop_down">
+        <option value="" selected="true" disabled="true">请选择检查项</option>
+        <option value="chazuo">插座</option>
+    </select>
+
+    <select id="category" name="category" class="cascade_drop_down">
+    </select>
+
+
+    <select id="type" name="type" class="cascade_drop_down">
+    </select>
+
+
+    <select id="series" name="series" class="cascade_drop_down">
+    </select>
+
+
+
+</div>
+
+
+
+</body>
+
+</html>

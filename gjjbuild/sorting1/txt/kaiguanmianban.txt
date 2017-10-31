@@ -1,0 +1,9 @@
+<option value="" selected="true" disabled="true">请选择描述</option>
+<option value='2'>表面污染、破损、刮花</option>
+<option value='3'>安装松动</option>
+<option value='4'>安装歪斜</option>
+<option value='5'>面板离墙缝隙过大</option>
+<option value='6'>开关不顺畅</option>
+<option value='7'>并列面板高低差</option>
+<option value='8'>接线错误</option>
+<option value='9'>其他</option>

@@ -1,13 +1,22 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>煎饼打包平台</title>
+    <title>打包</title>
+    <script type="text/javascript" src="jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="pkgbuild.js"></script>
 </head>
-<body>
-<div>
-<h1 text="输入包名"/>
-<input type="file" name="test" />
-</div>
+
+<body style="text-align: center">
+<form name="uploadForm" id="uploadForm" method="post" enctype="multipart/form-data"
+      action="upload" target="uploadFrame">
+    <input type="file" name="imageFile" id="upPic">
+    <input id="version" placeholder="输入版本号" onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}">
+</form>
+
+
+
+<div id="loadingtext" hidden="hidden">正在打包。。。</div>
+<button onclick="createPKG()">开始打包</button>
+<a href="apks/app-release-unsigned.apk" hidden="hidden" id="downloadurl">点击下载安装包</a>
 </body>
 </html>

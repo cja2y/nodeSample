@@ -1,0 +1,9 @@
+<option value="" selected="true" disabled="true">请选择描述</option>
+<option value='2'>断裂</option>
+<option value='3'>发黑</option>
+<option value='4'>划痕、破损</option>
+<option value='5'>污染</option>
+<option value='6'>色差</option>
+<option value='7'>安装不正</option>
+<option value='8'>渗漏</option>
+<option value='9'>其他（请再补充说明中填写）</option>

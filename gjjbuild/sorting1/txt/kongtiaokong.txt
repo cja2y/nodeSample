@@ -1,0 +1,5 @@
+<option value="" selected="true" disabled="true">请选择描述</option>
+<option value='2'>错位</option>
+<option value='3'>堵死或漏开</option>
+<option value='4'>内地外高</option>
+<option value='5'>其他</option>

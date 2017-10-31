@@ -1,0 +1,307 @@
+/*
+	管家关键字
+*/
+
+$(function(){
+	var pvid=getCookie('gj_mpvid');
+if(!pvid){
+	pvid=parseInt(Math.random()*100000000)
+	setCookie('gj_mpvid',pvid,7)
+}
+var gjt=getCookie('gj_t')||0;
+
+function setCookie(name,value,expiredays){
+	var exdate=new Date()
+	exdate.setDate(exdate.getDate()+expiredays)
+	document.cookie=name+ "=" +escape(value)+';path=/'+
+	// document.cookie=name+ "=" +escape(value)+';domain=qq.com;path=/'+
+	((expiredays==null) ? "" : ";expires="+exdate.toGMTString())
+}
+function getCookie(name){
+	if (document.cookie.length<=0){
+		return '';
+	}
+	var start=document.cookie.indexOf(name + "=")
+	if (start!=-1){ 
+		start=start + name.length+1 
+		var end=document.cookie.indexOf(";",start)
+		if (end==-1) end=document.cookie.length
+		return unescape(document.cookie.substring(start,end))
+	}
+	return ''
+}
+function report(params){
+	// 'guid','qq','engine','tag','id','url','ext'
+	var api = "//p.guanjia.qq.com/bin/monitor/report.php?r="+Math.random();
+	var uin=getCookie('uin')
+	if(uin==''){
+		uin=getCookie('o_cookie')
+	}
+	var dft={
+		tag:'news.omg',
+		uin:uin.replace(/^0*[^0-9]*0*/,''),
+		m_pvid:getCookie('gj_mpvid'),
+		domain:location.host
+	}
+	for(var d in dft){
+		if(params[d]!=undefined)continue;
+		params[d]=dft[d]
+	}
+	for(var prop in params){
+		api += "&"+prop+"="+encodeURIComponent(params[prop])
+	}
+	
+	var img=new Image()
+	img.onload=function(){
+		img=null
+	}
+	img.src=api
+}
+function injectCss(){
+	var cssText='#gj-kw-pop .card_wrap:after,#gj-kw-pop:after{content:"";display:block;height:0;clear:both}#gj-kw-pop{position:absolute;width:236px;zoom:1;z-index:31}#gj-kw-pop .horn{float:left;border-top:0 none;border-bottom:5px solid #db0000;border-left:5px solid transparent;border-right:5px solid transparent;margin:-5px 0 0 10px;overflow:hidden}#gj-kw-pop .card_wrap{clear:both;background-color:#fff;border:1px solid #d6d9de;border-top:1px solid #db0000;font-size:12px;padding:10px;zoom:1}#gj-kw-pop .card_wrap .pic{float:left;width:71px;height:71px;margin-right:10px;overflow:hidden}#gj-kw-pop .card_wrap .pic img{width:71px}#gj-kw-pop .card_wrap .name{color:#333;line-height:25px;font-size:16px;font-weight:700;margin-bottom:3px}#gj-kw-pop .card_wrap .abstract{color:#4f4f4f;line-height:22px;margin-bottom:5px;word-wrap:break-word;word-break:break-all}#gj-kw-pop .card_wrap .more{float:right;color:#5170a6}.gj-nameStar:link,.gj-nameStar:visited{color:#5170a6}#Cnt-Main-Article-QQ p .gj-nameStar:hover{color:#c00;border-bottom-color:#c00}#gj-kw-pop[type=desktop] .card_wrap .name{width:230px}#gj-kw-pop[type=desktop] .card_wrap .name a{color:#000;font-size:15px}#gj-kw-pop[type=desktop] .card_wrap .name a:active,#gj-kw-pop[type=desktop] .card_wrap .name a:hover,#gj-kw-pop[type=desktop] .card_wrap .name a:visited{color:#000}#gj-kw-pop[type=desktop] .card_wrap .more{background:#13c27c;display:inline-block;color:#fff;width:91px;text-align:center;line-height:27px;font-size:12px;text-decoration:none!important;padding:0;height:27px}';
+	var style=document.createElement("style");
+	style.setAttribute("type", "text/css");
+	if (style.styleSheet) {   // for IE
+		style.styleSheet.cssText = cssText;
+	} else {// others
+		var textnode = document.createTextNode(cssText);
+		style.appendChild(textnode);
+	}
+	document.body.appendChild(style)
+	
+}
+function getUrlArg(name) {
+	var reg = new RegExp("(\\?|&)" + name + "=([^&]*)(&|$)","i");
+	var r = window.location.href.match(reg)||[];
+	var v=r[2];
+	if(!v){return null}
+	try{
+		return decodeURIComponent(v);
+	}catch(e){
+		return v;
+	}
+}
+
+function openDownload(){
+	// window.open('http://dlied6.qq.com/invc/xfspeed/qqpcmgr/download/QQPCDownload78951.exe');
+	window.open('https://pm.myapp.com/invc/xfspeed/qqpcmgr/download/QQPCDownload78879.exe');
+	// window.open('http://guanjia.qq.com/product/clean/introduce/index.html');
+};
+
+	var config={
+		desktop:{
+			title:'清理桌面，提高效率',
+			btnWord:'立即体验',
+			iconUrl:'//s.pc.qq.com/guanjia/gjalpha/omg/img/deskclear.png'
+		},
+		wannacry:{
+			title:'如何应对勒索病毒',
+			btnWord:'立即防治'
+		}
+	}
+	var defaultConfig={
+		title:'腾讯电脑管家',
+		btnWord:'查看详情',
+		iconUrl:'//s.pc.qq.com/navigate/img/logom.png'
+	}
+	var group={
+		'brand':['电脑安全','电脑管家','QQ管家','安全软件'],
+		'sec':['查杀软件','杀毒软件','文件查杀','网站病毒','病毒查杀','查杀病毒','病毒扫描','木马病毒','木马查杀','木马软件','病毒扫描','清除病毒','扫描病毒','查杀木马','网页木马','网页病毒','病毒软件','网站木马','视频木马','u盘木马','电脑木马','电脑病毒','恶意木马','木马文件','木马拦截','病毒拦截','软件杀毒','杀毒工具','远控木马','杀毒产品','杀毒品牌','word病毒','u盘病毒','在线杀毒','系统病毒','系统木马','系统杀毒','杀毒检测','木马检测','清除木马','上网安全','钓鱼网站','恶意链接','钓鱼链接','杀毒引擎','查杀引擎'],
+		'shop':['网购','网络购物','钓鱼网站','网站安全','诱骗支付','篡改金额','伪装链接','买家信息','盗取信息','信息盗取','购物高峰','报名技巧','双十二','淘宝客服','快递员','骗取信任','套路','拆穿伪装','被骗','财产损失','谨慎访问','支付信息','隐私信息','密码被盗','文件被锁','木马攻击','哈勃分析','木马','陌生文件','云端病毒','网站域名','安全软件','大额订单','购物高峰','用户举报','骗子套路','网购安全','不法分子','网址安全','未经证实','双十一','剁手节','购物攻略','安全扫描','“pif”文件','伪造签名','高度风险','11.11','12.12','双11','双12'
+			// ,'此后'
+
+		],
+		'ticket':['春运','诈骗','购票攻略','锁屏诈骗','抢票','刷票','售票','机票','第三方抢票','刷票神器','抢票软件','甄别网站','识别验证码','全自动刷票','火车票','返程高峰','防盗攻略','购票优惠','网络购票','倒卖车票','骗子招数','忽悠招数','刷票陷阱','安全抢票'
+			// ,'微软将'
+		],
+		'desktop':['桌面','整理','收纳','节省空间','归纳','归类','屏幕','图标','返工','开工','工作','办公','杂乱','凌乱','高效','低效'
+		// ,'微软'
+
+		],
+
+		'avtest':['国产杀软','AV-C','评测成绩','安全产品','杀毒第一','腾讯安全','VB100测试','赛可达评测','ICSA测试','A+','测试成绩','清除测试','世界测试','检出测试','性能测试','国产杀毒','拔得头筹','世界第一','网络安全'
+		],
+
+		'wannacry':['勒索病毒','WannaCry','WanaCrypt','勒索软件','勒索者病毒','敲诈者病毒','445端口','文件恢复','敲诈病毒','onion病毒','比特币','微软杀毒','shadow brokers','139端口','MS17-101漏洞','影子经纪人','校园网被黑','校园网勒索','蠕虫病毒','电脑锁机','误删文件','误删除文件','文件误删','保护文件','文档保护','文件保护','数据误删','文件中毒','中毒文件','文档','文件']
+	}
+	var href=location.href,dk=getUrlArg('debugkey')
+	if(dk&&group[dk]){//不为空
+		var ks=getUrlArg('keys').split(',')
+		for (var i = 0; i < ks.length; i++) {
+			group[dk].push(ks[i])
+		}
+		
+	}
+	var word={
+		'brand':'腾讯电脑管家夺得全球杀毒软件评测全满贯，安全实力世界领先，保护电脑安全首选电脑管家！',
+		'sec':'拥有强大的木马、病毒云查杀功能，从根源预防安全问题，为电脑和财产的安全保驾护航！',
+		'shop':'大家网购频次增多，受网购相关木马的攻击也会增大，且听电脑管家为您理清骗子的套路。',
+		'ticket':'向春运诈骗说NO！腾讯电脑管家帮你看清骗子的忽悠招数，避开春运路上的大坑！',
+		'desktop':'下载使用电脑管家的桌面整理功能，一键整理电脑桌面，简化文件分类，提高工作效率。',
+		'avtest':'AV-C权威测试机构发布2016年评测汇总报告，在报告中电脑管家斩获5项“A+”破国产杀软记录！',
+		'wannacry':'全球爆发“勒索病毒”，腾讯电脑管家紧急推出病毒免疫和文档保护工具！'
+	}
+
+	var murl='http://guanjia.qq.com/product/home/v12/?ADTAG=cop.innercop.news.keyword1';
+	var url={
+		'brand':murl,
+		'sec':murl,
+		'shop':'http://time.qq.com/festival/1212/20161212.htm?pgv_ref=guanjianews_tips&from=guanjia',
+		'ticket':'http://guanjia.qq.com/product/home/v12/?ADTAG=cop.innercop.news.keyword1',
+		'desktop':'http://time.qq.com/baike/deskclean/20170207.htm?pgv_ref=guanjianews_tips&from=guanjia',
+		'avtest':'https://guanjia.qq.com/news/n2/201702/16_377.html?ADTAG=cop.innercop.news.pingce',
+		'wannacry':'https://guanjia.qq.com/wannacry/open.html?ADTAG=cop.innercop.guanjianzi'
+	}
+	
+	var imgUrl='//s.pc.qq.com/navigate/img/logom.png';
+	var reportPrefix=''
+	var reportHash={} //上报hash
+
+	var show={},total=0
+	var article=$('#Cnt-Main-Article-QQ p')
+	var children=article.contents()
+	var lastEle=null,keyHashCount={}
+	children.each(function(i,e){
+		var ele=$(e)
+		
+		if(e.nodeType!=3){
+			lastEle=ele
+			return
+		}
+		
+		var change=false;
+		// var originalText=ele.text();
+		var text=ele.text();
+		// var text=originalText.toLowerCase();
+
+		for(var groupName in group){
+			var keys=group[groupName]
+
+			for (var i = 0; i < keys.length; i++) {
+				if(total>=5){
+					break;
+				}
+				var k=keys[i],pos=-1
+				if(!keyHashCount[k]){
+					keyHashCount[k]=0
+				}
+				while((pos=text.indexOf(k,pos))!=-1){
+					if(keyHashCount[k]>=1){
+						//同个关键字只显示一次
+						break;
+					}
+					keyHashCount[k]++
+
+					total++
+					pos+=k.length
+					change=true
+
+					var reg=new RegExp(k)
+					// var originalKey=originalText.match(reg)||[]
+
+					text=text.replace(reg,'<a g="'+groupName+'" target="_blank" key="'+i+'" href="'+url[groupName]+'" class="nameStar gj-nameStar gj-keyword">'+k+'</a>')
+
+					if(!reportHash[groupName]){
+						reportHash[groupName]=1
+					}else{
+						reportHash[groupName]++
+					}
+				}
+			}
+		}
+		if(change){
+			ele.replaceWith(text)
+		}
+
+	})
+
+	//关键字曝光量上报,区分类别上报次数
+	for(var i in reportHash){
+		report({tag:i+'news.omg.kwshow.'+reportHash[i]})
+	}
+	
+	// return ;
+	var tipsHtml=
+	'<div id="gj-kw-pop" style="display: none;">'+
+		'<i class="horn"></i>'+
+		'<div class="card_wrap">'+
+			'<a class="pic" href="" target="_blank" title="name" bosszone="sogou_star_click">'+
+				'<img width="71" src="">'+
+			'</a>'+
+			'<h2 class="name">'+
+				'<a href="" target="_blank" title="name" bosszone="sogou_star_click">name</a>'+
+			'</h2>'+
+			'<p class="abstract"></p>'+
+			'<a class="more" href="" target="_blank" bosszone="sogou_star_click">查看详情</a>'+
+		'</div>'+
+	'</div>'
+	injectCss()
+
+	$('body').append(tipsHtml)
+	var pop=$('#gj-kw-pop')
+	
+	function getConfig(group,key){
+		if(!config[group] ||
+			!config[group][key]
+			){
+			return defaultConfig[key];
+		}
+		return config[group][key]
+	}
+	function setPop(group){
+		//
+		pop.find('a').attr('href',url[group])
+		pop.find('.abstract').text(word[group])
+		pop.find('img').attr('src',getConfig(group,'iconUrl'))
+		pop.find('.name a').text(getConfig(group,'title'))
+		pop.find('.more').text(getConfig(group,'btnWord'))
+		pop.attr('type',group)
+
+		//特例
+		if(group=='desktop'){
+			pop.find('.more').attr('href','http://dlied6.qq.com/invc/xfspeed/qqpcmgr/download/QQPCDownload78915.exe')
+		}
+	}
+	var showTimeoutId=0
+	article.on('mouseenter','.gj-keyword',function(){
+		clearTimeout(showTimeoutId)
+		var ele=$(this)
+		var offset=ele.offset()
+		pop.css('left',offset.left+'px')
+			.css('top',(offset.top+8+ele.outerHeight())+'px')
+			.show()
+
+		var gname=ele.attr('g')
+		// setPop(keys[i],word,'aaa',url)
+		setPop(gname)
+
+		if(gname=='brand' ||gname==''){
+			reportPrefix=''
+		}else{
+			reportPrefix=gname
+		}
+		report({tag:reportPrefix+'news.omg.kwpop.show'})
+	})
+	article.on('mouseleave','.gj-keyword',function(){
+		showTimeoutId=setTimeout(function(){
+			pop.hide()
+		},500)
+	})
+	article.on('mouseenter','.gj-nameStar',function(){
+		clearTimeout(showTimeoutId)
+	})
+
+	pop.on('click','a',function(){
+		report({tag:reportPrefix+'news.omg.kw.click'})
+	})
+	pop.on('mouseenter',function(){
+		clearTimeout(showTimeoutId)
+	})
+	pop.on('mouseleave',function(){
+		showTimeoutId=setTimeout(function(){
+			pop.hide()
+		},500)
+	})
+
+
+})/*  |xGv00|310c3f8c2f3018167f19cdfcba282367 */
