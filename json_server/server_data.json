@@ -1,0 +1,32 @@
+{
+  "posts": [
+    { "id": 1, "title": "json-server1", "author": "typicode1" },
+    { "id": 2, "title": "json-server2", "author": "typicode2" }
+  ],
+  "comments": [
+    { "id": 1, "body": "some comment", "postId": 1 }
+  ],
+  "test":[
+    { "title": "json-server1", "author": "typicode1" },
+    { "title": "json-server2", "author": "typicode2" }
+  ],
+  "profile": { "name": "typicod1" },
+  "player_1":{"name":"托尼","age":19,"rp":82,"shouru":3000,"gjj":0,"job":"lifashi","caichan":50,"bsd":0},
+  "player_2":{"name":"小马","age":21,"rp":70,"shouru":20000,"gjj":5000},
+  "lifashi_job_des":{"lifashi":"他背井离乡，来到大城市。在乡下隔壁王二妞的介绍下，做了一名光荣的美发师。现在，他已脱胎换骨。除了王二妞，再也没人喊他二牛了"},
+  "user_general_des":{"body_des":["身高","","","","",""],"face_des":["","","","","",""],"family_des":["","","","","",""],"oteher_des":["","","","","",""]},
+  "job_random_event_good":{"lifashi_event":[{"event_des":"给来自天上人间的小姐姐做了全身护理和身心疏导，小姐姐很高兴给了小费","shouru":100},{"event_des":"推销vip的时候被来自东北的大锤用金链子打晕还陪了汤药费","shouru":-1000},{"event_des":"剪断了客人珍藏18年的鼻毛","shouru":-200}]},
+  "job_random_event_normal":{"lifashi_event":[{"event_des":"剪断了客人珍藏18年的鼻毛,赔了100块精神损失费","shouru":-100},{"event_des":"推销vip的时候被来自东北的大锤用金链子打晕还陪了汤药费","shouru":-1000},{"event_des":"剪断了客人珍藏18年的鼻毛","shouru":-200}]},
+
+  "choice_event":{"lifashi_event":[{"title":"主管penny叫你夜晚8点去他的房间讨论下职业发展规划","choice":[{"title":"反手给了他一巴掌","id":"1"},{"title":"告诉penny自己已经有男朋友了","id":"2"},{"title":"同意，顺带买了一瓶凡士林","id":"3"}]},[],[],[],[]]},
+  "lifashi_choice_result_good":[
+    {"id":1,"des":"penny捂着自己的左脸露出幸福的微笑：我喜欢的男人好man好强壮(给你10块装身)","shouru":10},
+    {"id":2,"des":"penny很欣赏你的坦白，給了你5块做奖励","shouru":5},
+    {"id":3,"des":"夜晚10点钟，penny望着已经空了的凡士林瓶子，决定把一生托付于你","shouru":100}
+  ],
+  "lifashi_choice_result_normal":[
+    {"id":1,"des":"敢尼玛打上司","shouru":-10},
+    {"id":2,"des":"penny一巴掌打在你脑袋上：有你妈了个比","shouru":-5},
+    {"id":3,"des":"penny对凡士林过敏，送去医院花了200块","shouru":-200}
+  ]
+}
