@@ -2,71 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="84403467-79e9-4901-9180-6a39c1138979" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/.gitignore" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/.npmignore" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/Gemfile" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/LICENSE.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/README.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/_config.build.yml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/_config.yml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/_includes/navbar.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/_layouts/default.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/bin/jsencrypt.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/bin/jsencrypt.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/bower.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/declarations/lib/asn1js/asn1.d.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/declarations/lib/asn1js/base64.d.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/declarations/lib/asn1js/hex.d.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/declarations/lib/asn1js/int10.d.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/declarations/lib/jsbn/base64.d.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/declarations/lib/jsbn/jsbn.d.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/declarations/lib/jsbn/prng4.d.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/declarations/lib/jsbn/rng.d.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/declarations/lib/jsbn/rsa.d.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/declarations/lib/jsbn/util.d.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/declarations/src/JSEncrypt.d.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/declarations/src/JSEncryptRSAKey.d.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/declarations/src/index.d.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/demo/index.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/example.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/gulpfile.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/index.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/jquery.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/lib/asn1js/LICENSE.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/lib/asn1js/asn1.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/lib/asn1js/base64.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/lib/asn1js/hex.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/lib/asn1js/int10.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/lib/asn1js/oids.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/lib/jsbn/LICENSE.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/lib/jsbn/README.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/lib/jsbn/base64.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/lib/jsbn/jsbn.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/lib/jsbn/prng4.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/lib/jsbn/rng.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/lib/jsbn/rsa.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/lib/jsbn/util.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/lib/jsrsasign/LICENSE.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/lib/jsrsasign/asn1-1.0.d.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/lib/jsrsasign/asn1-1.0.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/lib/jsrsasign/yahoo.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/package.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/rollup.config.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/src/JSEncrypt.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/src/JSEncryptRSAKey.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/src/LICENSE.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/src/index.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/stats.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/test/generate_test_keys.sh" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/test/index.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/test/libs/index.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/test/libs/mocha.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/test/libs/mocha.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/test/test.rsa.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/tsconfig.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/tslint.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jsencrypt-master/webpack.config.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nodeSample" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/myWeb/photo.html" afterPath="$PROJECT_DIR$/myWeb/photo.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/personalSite/photo.html" afterPath="$PROJECT_DIR$/personalSite/photo.html" />
@@ -89,11 +24,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="webser.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="webser.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/webser.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="277">
-              <caret line="57" column="44" lean-forward="true" selection-start-line="57" selection-start-column="44" selection-end-line="57" selection-end-column="44" />
+            <state relative-caret-position="855">
+              <caret line="57" column="44" lean-forward="false" selection-start-line="57" selection-start-column="44" selection-end-line="57" selection-end-column="44" />
               <folding />
             </state>
           </provider>
@@ -112,18 +47,18 @@
       <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/personalSite/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1159">
+            <state relative-caret-position="0">
               <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="photo.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="photo.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/personalSite/photo.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="435">
-              <caret line="29" column="29" lean-forward="false" selection-start-line="29" selection-start-column="29" selection-end-line="29" selection-end-column="29" />
+            <state relative-caret-position="217">
+              <caret line="18" column="14" lean-forward="true" selection-start-line="18" selection-start-column="14" selection-end-line="18" selection-end-column="14" />
               <folding>
                 <element signature="n#style#0;n#iframe#0;n#body#0;n#html#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#div#0;n#div#1;n#div#0;n#form#0;n#body#0;n#html#0;n#!!top" expanded="true" />
@@ -225,6 +160,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -237,10 +174,22 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="node_1" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="nodeSample" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="personalSite" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
-      <pane id="Scratches" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -404,7 +353,8 @@
       <workItem from="1523856724126" duration="973000" />
       <workItem from="1524137267439" duration="636000" />
       <workItem from="1524195595668" duration="14000" />
-      <workItem from="1524210634332" duration="731000" />
+      <workItem from="1524210634332" duration="990000" />
+      <workItem from="1524211654599" duration="4000" />
     </task>
     <task id="LOCAL-00001" summary="123">
       <created>1468230673602</created>
@@ -469,23 +419,30 @@
       <option name="project" value="LOCAL" />
       <updated>1524210846988</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="123">
+      <created>1524211374994</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1524211374994</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="136155000" />
+    <option name="totallyTimeSpent" value="136418000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1440" height="826" extended-state="0" />
+    <frame x="0" y="23" width="1440" height="826" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info id="TypeScript" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32980973" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32980973" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3678474" sideWeight="0.65609586" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3678474" sideWeight="0.65821" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.22410148" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.38915664" sideWeight="0.48907682" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3678474" sideWeight="0.34390417" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3678474" sideWeight="0.34179" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -495,6 +452,7 @@
       <window_info id="Documentation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" x="100" y="100" width="1240" height="700" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="TypeScript" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -532,13 +490,7 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/WebRoot/photo.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1245">
-          <caret line="83" column="2" lean-forward="false" selection-start-line="83" selection-start-column="2" selection-end-line="83" selection-end-column="69" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/WebRoot/photo.html" />
     <entry file="file://$PROJECT_DIR$/gjjbuild/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="270">
@@ -599,13 +551,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/WebRoot/photo.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1245">
-          <caret line="83" column="2" lean-forward="false" selection-start-line="83" selection-start-column="2" selection-end-line="83" selection-end-column="69" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/WebRoot/photo.html" />
     <entry file="file://$PROJECT_DIR$/licaiDataServer/licaiData.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
@@ -645,13 +591,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/WebRoot/UpdateServer.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/WebRoot/UpdateServer.js" />
     <entry file="file://$PROJECT_DIR$/views/index.jade">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -763,13 +703,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/WebRoot/photo.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1245">
-          <caret line="83" column="2" lean-forward="false" selection-start-line="83" selection-start-column="2" selection-end-line="83" selection-end-column="69" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/WebRoot/photo.html" />
     <entry file="file://$PROJECT_DIR$/xiumei/嗅美.htm" />
     <entry file="file://$PROJECT_DIR$/xiumei/嗅美.html" />
     <entry file="file://$PROJECT_DIR$/xiumei/xm.html" />
@@ -797,6 +731,36 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/personalSite/web/index.70dcd133e663d51ed1ed.bundle.js" />
+    <entry file="file://$PROJECT_DIR$/personalSite/web/vendor.628a41fd953cae8c1887.bundle.js" />
+    <entry file="file://$PROJECT_DIR$/personalSite/web/index.html" />
+    <entry file="file://$PROJECT_DIR$/personalSite/tour.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jsencrypt-master/bin/jsencrypt.js" />
+    <entry file="file://$PROJECT_DIR$/jsencrypt-master/test/libs/mocha.js" />
+    <entry file="file://$PROJECT_DIR$/jsencrypt-master/demo/index.html" />
+    <entry file="file://$PROJECT_DIR$/personalSite/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/webser.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="855">
+          <caret line="57" column="44" lean-forward="false" selection-start-line="57" selection-start-column="44" selection-end-line="57" selection-end-column="44" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/myWeb/photo.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1035">
@@ -809,85 +773,13 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/personalSite/photo.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="435">
-          <caret line="29" column="29" lean-forward="false" selection-start-line="29" selection-start-column="29" selection-end-line="29" selection-end-column="29" />
+        <state relative-caret-position="217">
+          <caret line="18" column="14" lean-forward="true" selection-start-line="18" selection-start-column="14" selection-end-line="18" selection-end-column="14" />
           <folding>
             <element signature="n#style#0;n#iframe#0;n#body#0;n#html#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#0;n#div#1;n#div#0;n#form#0;n#body#0;n#html#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#img#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/personalSite/web/index.70dcd133e663d51ed1ed.bundle.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/personalSite/web/vendor.628a41fd953cae8c1887.bundle.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/personalSite/web/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" column="26" lean-forward="false" selection-start-line="7" selection-start-column="20" selection-end-line="7" selection-end-column="26" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/personalSite/tour.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jsencrypt-master/bin/jsencrypt.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jsencrypt-master/test/libs/mocha.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jsencrypt-master/demo/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="267">
-          <caret line="52" column="90" lean-forward="false" selection-start-line="52" selection-start-column="90" selection-end-line="52" selection-end-column="90" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/personalSite/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1159">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/webser.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="277">
-          <caret line="57" column="44" lean-forward="true" selection-start-line="57" selection-start-column="44" selection-end-line="57" selection-end-column="44" />
-          <folding />
         </state>
       </provider>
     </entry>
